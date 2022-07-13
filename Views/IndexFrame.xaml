@@ -1,0 +1,33 @@
+﻿<Page
+    x:Class="MyWareHouse.Views.IndexFrame"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MyWareHouse.Views"
+    xmlns:viewModels="using:MyWareHouse.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.Resources>
+            <DataTemplate x:Key="IndexLeftMenuItem" x:DataType="viewModels:Category">
+                <muxc:NavigationViewItem ToolTipService.ToolTip="{x:Bind Name}" Content="{x:Bind Name}" MenuItemsSource="{x:Bind Children}" Icon="{x:Bind Icon}"/>
+            </DataTemplate>
+        </Grid.Resources>
+        <muxc:NavigationView DataContext="indexFrameViewModel" x:Name="navview" 
+                            MenuItemsSource="{x:Bind indexFrameViewModel.Categories, Mode=OneWay}" 
+                            FooterMenuItemsSource="{x:Bind indexFrameViewModel.FooterMenu, Mode=OneWay}"
+                            MenuItemTemplate="{StaticResource IndexLeftMenuItem}"
+                            ItemInvoked="{x:Bind indexFrameViewModel.OnItemInvoked}"
+                             PaneDisplayMode="Auto">
+            <Frame x:Name="ContentFrame">
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition  />
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+            </Frame>
+        </muxc:NavigationView>
+    </Grid>
+</Page>
