@@ -10,10 +10,11 @@ namespace MyWareHouse.ViewModels
 {
     class IndexFrameViewModel
     {
-
+        public Action<Frame> poinerAction;
 
         public IndexFrameViewModel()
         {
+
             FooterMenu = new ObservableCollection<Category>();
             FooterMenu.Add(new Category()
             {
@@ -70,6 +71,9 @@ namespace MyWareHouse.ViewModels
                     Icon = new SymbolIcon(Symbol.Page),
                     Children = null
                 });
+            } else if (invokedItem as string == "主页")
+            {
+                this.poinerAction?.Invoke(new Frame() { Content = new Views.IndexGameShowFrame() });
             }
 
         }

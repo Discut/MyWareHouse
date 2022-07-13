@@ -1,0 +1,18 @@
+﻿<UserControl
+    x:Class="MyWareHouse.Common.MyUserControl1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MyWareHouse.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300" Width="200">
+    <Grid Background="Orange">
+        <StackPanel x:Name="stack" Orientation="Vertical" VerticalAlignment="Bottom">
+            <StackPanel Orientation="Vertical" Height="100">
+                <TextBlock Text="Text Box"></TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+    
+</UserControl>
