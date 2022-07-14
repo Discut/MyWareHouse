@@ -15,10 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using MyWareHouse.Views;
-using Windows.ApplicationModel.Core;
-
-namespace MyWareHouse
+namespace TestApp1
 {
     /// <summary>
     /// 提供特定于应用程序的行为，以补充默认的应用程序类。
@@ -73,15 +70,6 @@ namespace MyWareHouse
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
-
-
-                // Hide default title bar.
-                var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-                coreTitleBar.ExtendViewIntoTitleBar = true;
-
-                var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
-                titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
-                titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
             }
         }
 

@@ -1,0 +1,58 @@
+﻿<Page
+    x:Class="TestApp1.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TestApp1"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+
+    <Page.Resources>
+        <DataTemplate x:Key="ContactListViewTemplate" x:DataType="local:Contact">
+            <!--<local:MyUserControl1 x:Name="PortraitEllipse" Height="10" Width="10"></local:MyUserControl1>-->
+            <!--<TextBlock x:Name="PortraitEllipse" Text="{x:Bind Name}" x:Phase="1" Margin="0,5,0,5"/>-->
+            <!--<StackPanel  Background="Orange" Height="300" Width="200" Orientation="Vertical" VerticalAlignment="Bottom" Translation="0,0,0" HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Vertical" Height="100" Margin="0,0,0,0" Canvas.ZIndex="-99">
+                    
+                    <StackPanel.RenderTransform>
+                        <TranslateTransform x:Name="InfoBoxInAnimation"/>
+                    </StackPanel.RenderTransform>
+                </StackPanel>
+
+                <StackPanel.TranslationTransition>
+                    <Vector3Transition/>
+                </StackPanel.TranslationTransition>
+
+            </StackPanel>-->
+            <StackPanel x:Name="PortraitEllipse" >
+                <TextBlock  Text="Text Box"></TextBlock>
+
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <Image 
+            x:Name="SourceImage"
+            Width="500" 
+            Height="500" 
+            Source="/Assets/Wide310x150Logo.scale-200.png"
+            PointerPressed="SourceImage_PointerPressed" HorizontalAlignment="Left"/>
+
+
+        <ListView
+            x:Name="BaseExample"
+            ItemTemplate="{StaticResource ContactListViewTemplate}"
+            IsItemClickEnabled="True"
+            ItemClick="BaseExample_ItemClick"
+            BorderThickness="1"
+            BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+            Width="350"
+            Height="400"
+            HorizontalAlignment="Left"/>
+
+        
+
+    </Grid>
+</Page>

@@ -33,19 +33,20 @@ namespace MyWareHouse.ViewModels
         public ObservableCollection<Category> Categories = new ObservableCollection<Category>()
     {
         new Category(){
-            Name = "Menu item 1",
+            Name = "主页",
+            Tag = "Index",
+        },
+        new Category(){
+            Name = "动作游戏",
+            Tag = "Action",
             Children = new ObservableCollection<Category>() {
                 new Category() {
-                            Name  = "Menu item 3",
+                            Name  = "DNF DULL",
                             Children = null
                         }
             }
         },
-        new Category(){
-            Name = "Menu item 6",
-            Children = null
-        },
-        new Category(){ Name = "Menu item 10" }
+        new Category(){ Name = "冒险游戏" }
     };
 
         private ObservableCollection<Category> _footerMenu;
@@ -61,7 +62,7 @@ namespace MyWareHouse.ViewModels
         {
             object invokedItem = e.InvokedItem;
 
-            sender.Header = invokedItem;
+            //sender.Header = invokedItem;
 
             if (invokedItem as string == "Plus New Item")
             {
@@ -83,6 +84,7 @@ namespace MyWareHouse.ViewModels
     public class Category
     {
         public String Name { get; set; }
+        public string Tag = "Index";
         public IconElement Icon = new SymbolIcon(Symbol.Library);
         public ObservableCollection<Category> Children { get; set; }
     }

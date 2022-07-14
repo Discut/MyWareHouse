@@ -12,16 +12,26 @@
     <Grid>
         <Grid.Resources>
             <DataTemplate x:Key="IndexLeftMenuItem" x:DataType="viewModels:Category">
-                <muxc:NavigationViewItem ToolTipService.ToolTip="{x:Bind Name}" Content="{x:Bind Name}" MenuItemsSource="{x:Bind Children}" Icon="{x:Bind Icon}"/>
+                <muxc:NavigationViewItem ToolTipService.ToolTip="{x:Bind Name}" Tag="{x:Bind Tag}" Content="{x:Bind Name}" MenuItemsSource="{x:Bind Children}" Icon="{x:Bind Icon}"/>
             </DataTemplate>
+            <CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
         </Grid.Resources>
-        <muxc:NavigationView DataContext="indexFrameViewModel" x:Name="navview" 
-                            MenuItemsSource="{x:Bind indexFrameViewModel.Categories, Mode=OneWay}" 
+        <Image Source="/Assets/background_1.jpg"/>
+        <muxc:NavigationView DataContext="indexFrameViewModel" x:Name="navview"
+                             IsTitleBarAutoPaddingEnabled="False"
+                             Loaded="leftBar_Loaded"
+                             SelectionChanged="leftBar_SelectionChanged"
+                            MenuItemsSource="{x:Bind indexFrameViewModel.Categories, Mode=OneWay}"
                             FooterMenuItemsSource="{x:Bind indexFrameViewModel.FooterMenu, Mode=OneWay}"
                             MenuItemTemplate="{StaticResource IndexLeftMenuItem}"
                             ItemInvoked="{x:Bind indexFrameViewModel.OnItemInvoked}"
                              PaneDisplayMode="Auto">
-            <Frame x:Name="ContentFrame">
+            <!--<muxc:NavigationView.MenuItemContainerStyle>
+                <Style TargetType="muxc:NavigationView">
+                    <Setter Property="Background" Value="Orange"/>
+                </Style>
+            </muxc:NavigationView.MenuItemContainerStyle>-->
+            <Frame x:Name="ContentFrame" Background="#fff" Margin="-1,0,0,0" >
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition  />
