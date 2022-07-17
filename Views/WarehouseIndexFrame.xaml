@@ -7,14 +7,92 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:viewModels="using:MyWareHouse.ViewModels"
+    xmlns:model="using:MyWareHouse.Models.Data"
     xmlns:common="using:MyWareHouse.Common"
     mc:Ignorable="d"
     Background="#00000000">
 
     <Page.Resources>
-        <DataTemplate x:Key="ImageTemplate" x:DataType="viewModels:GameBarItem">
-            <StackPanel x:Name="TransformeControl">
-                <Rectangle Fill="Orange" Height="300" Width="200"/>
+        <DataTemplate x:Key="ImageTemplate" x:DataType="model:GameBar">
+            <!--<StackPanel
+                x:Name="TransformeControl"
+                Width="200"
+                Height="300"
+                Background="Orange">
+                <Image Source="/Assets/background_1.jpg" Width="200" Height="300" Stretch="UniformToFill" Visibility="Collapsed"/>
+                <TextBlock
+                    Width="400"
+                    d:LayoutRounding="Auto"
+                    FontSize="400"
+                    FontWeight="ExtraBlack"
+                    Foreground="#55ffffff"
+                    Text="{x:Bind ShowTitle[0]}"
+                    Translation="0,-100,0"
+                    UseLayoutRounding="False">
+                </TextBlock>
+                <TextBlock
+                    Width="300"
+                    d:LayoutRounding="Auto"
+                    FontSize="300"
+                    FontWeight="ExtraBlack"
+                    Foreground="#55ffffff"
+                    RenderTransformOrigin="0.5,0"
+                    Text="{x:Bind ShowTitle[1]}"
+                    Translation="0,-550,0"
+                    UseLayoutRounding="False">
+                    <TextBlock.RenderTransform>
+                        <RotateTransform Angle="10" />
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </StackPanel>-->
+
+            <StackPanel
+                x:Name="TransformeControl"
+                Width="200"
+                Height="300"
+                Background="Orange">
+                <Image
+                    Width="200"
+                    Height="300"
+                    Source="/Assets/background_1.jpg"
+                    Stretch="UniformToFill"
+                    Visibility="Collapsed" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" >
+                        <TextBlock Margin="10,0,0,0" Foreground="#fff" FontSize="24" Text="{x:Bind Title}"/>
+                        <Rectangle Height="1" Fill="#fff"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock
+                            Width="400"
+                            d:LayoutRounding="Auto"
+                            FontSize="400"
+                            FontWeight="ExtraBlack"
+                            Foreground="#55ffffff"
+                            Text="{x:Bind ShowTitle[0]}"
+                            Translation="0,-160,0"
+                            UseLayoutRounding="False" />
+                        <TextBlock
+                            Width="300"
+                            d:LayoutRounding="Auto"
+                            FontSize="300"
+                            FontWeight="ExtraBlack"
+                            Foreground="#55ffffff"
+                            RenderTransformOrigin="0.5,0"
+                            Text="{x:Bind ShowTitle[1]}"
+                            Translation="0,-600,0"
+                            UseLayoutRounding="False">
+                            <TextBlock.RenderTransform>
+                                <RotateTransform Angle="10" />
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+
+                    </StackPanel>
+                </Grid>
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
@@ -41,15 +119,12 @@
                     <Rectangle Height="1.2" Fill="#000"></Rectangle>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="12,0,0,0">
-
                     <GridView
                         IsItemClickEnabled="True"
-                        ItemClick="gridViewTransform_ItemClick"
+                        ItemClick="GameBarItem_Click"
                         x:Name="gridViewTransform"
-                        SelectionChanged="GridView_SelectionChanged"
                         ItemTemplate="{StaticResource ImageTemplate}"
-                        ItemsSource="{x:Bind gameBarItem}">
-
+                        ItemsSource="{x:Bind viewModel.LastPlyGames}">
                         <GridView.ItemContainerStyle>
                             <Style TargetType="GridViewItem">
                                 <Setter Property="Margin" Value="5, 5, 19, 5"/>
@@ -74,10 +149,11 @@
                 </StackPanel>
                 <StackPanel Grid.Row="3" Margin="12,0,0,0" HorizontalAlignment="Center">
                     <GridView
-                        x:Name="StyledGrid"
+                        IsItemClickEnabled="True"
+                        ItemClick="GameBarItem_AllGameBar_Click"
+                        x:Name="AllGameGridView"
                         ItemTemplate="{StaticResource ImageTemplate}"
-                        ItemsSource="{x:Bind gameBarItem}">
-
+                        ItemsSource="{x:Bind viewModel.AllGames}">
                         <GridView.ItemContainerStyle>
                             <Style TargetType="GridViewItem">
                                 <Setter Property="Margin" Value="5, 5, 24, 5"/>

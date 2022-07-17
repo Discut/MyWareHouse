@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MyWareHouse.Models.Data;
+using MyWareHouse.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,16 +26,18 @@ namespace MyWareHouse.Views
     /// </summary>
     public sealed partial class WarehouseIndexFrame : Page
     {
-        private ViewModels.GameBarItem _gameBar;
+        private WarehouseIndexFrameViewModel viewModel;
+
+        private Models.Data.GameBar _gameBar;
 
         public List<ViewModels.GameBarItem> gameBarItem = new List<ViewModels.GameBarItem>() {
         new ViewModels.GameBarItem()
         {
-            Name="1232"
+            Title="1232"
         },
         new ViewModels.GameBarItem()
         {
-            Name="1232"
+            Title="1232"
         },
         new ViewModels.GameBarItem(),
         new ViewModels.GameBarItem(),
@@ -48,42 +52,27 @@ namespace MyWareHouse.Views
         public WarehouseIndexFrame()
         {
             this.InitializeComponent();
-        }
 
-
-        public void PrepareAnimationWithItem(ViewModels.GameBarItem item)
-        {
-
-            
-            //var anim = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("BackwardConnectedAnimation", DestinationElement);
-
-            //if (config != null && ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 7))
-            //{
-            //    anim.Configuration = config;
-            //}
+            this.DataContext = viewModel = new WarehouseIndexFrameViewModel();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
-            var anim = ConnectedAnimationService.GetForCurrentView().GetAnimation("BackwardConnectedAnimation");
-            if (anim != null)
+            GameBar gameBar = e.Parameter as GameBar;
+            if (gameBar != null)
             {
-                //AddContentPanelAnimations();
-                //anim.TryStart(DestinationElement);
+                viewModel.AllGames.AddRange(gameBar.Children);
+
             }
+
         }
-
-        private void GridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            this.PrepareAnimationWithItem((ViewModels.GameBarItem)e.AddedItems[0]);
-
-
-            
-        }
-
-        private void gridViewTransform_ItemClick(object sender, ItemClickEventArgs e)
+        /**
+         * <summary>
+         * 游戏小图点击后转跳到游戏详情页
+         * </summary>
+         */
+        private void GameBarItem_Click(object sender, ItemClickEventArgs e)
         {
             //gridViewTransform.PrepareConnectedAnimation("ForwardConnectedAnimation", item, "TransformeControl");
 
@@ -91,18 +80,46 @@ namespace MyWareHouse.Views
             if (gridViewTransform.ContainerFromItem(e.ClickedItem) is GridViewItem container)
             {
                 // Stash the clicked item for use later. We'll need it when we connect back from the detailpage.
-                _gameBar = container.Content as ViewModels.GameBarItem;
+                _gameBar = container.Content as Models.Data.GameBar;
 
+                this.GotoGameInfoFrame(_gameBar, gridViewTransform);
+
+            }
+        }
+
+        private void GameBarItem_AllGameBar_Click(object sender, ItemClickEventArgs e)
+        {
+            //gridViewTransform.PrepareConnectedAnimation("ForwardConnectedAnimation", item, "TransformeControl");
+
+            // Get the collection item corresponding to the clicked item.
+            if (AllGameGridView.ContainerFromItem(e.ClickedItem) is GridViewItem container)
+            {
+                // Stash the clicked item for use later. We'll need it when we connect back from the detailpage.
+                _gameBar = container.Content as Models.Data.GameBar;
+
+                this.GotoGameInfoFrame(_gameBar, AllGameGridView);
+
+            }
+        }
+        /**
+         * <summary>
+         * 页面转跳与动画实现
+         * </summary>
+         */
+        private void GotoGameInfoFrame(object control, GridView gridView)
+        {
+            
+            if (control != null)
+            {
                 // Prepare the connected animation.
                 // Notice that the stored item is passed in, as well as the name of the connected element. 
                 // The animation will actually start on the Detailed info page.
-                var animation = gridViewTransform.PrepareConnectedAnimation("ForwardConnectedAnimation", _gameBar, "TransformeControl");
-
+                var animation = gridView.PrepareConnectedAnimation("ForwardConnectedAnimation", control, "TransformeControl");
             }
 
             // Navigate to the DetailedInfoPage.
             // Note that we suppress the default animation. 
-            Frame.Navigate(typeof(Views.GameInfoFrame), _gameBar, new SuppressNavigationTransitionInfo());
+            Frame.Navigate(typeof(Views.GameInfoFrame), control, new DrillInNavigationTransitionInfo());
         }
     }
 }

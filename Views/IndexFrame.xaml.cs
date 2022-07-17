@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MyWareHouse.Models.Data;
+using MyWareHouse.Models.FavoriteService;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,6 +25,7 @@ namespace MyWareHouse.Views
     /// </summary>
     public sealed partial class IndexFrame : Page
     {
+        bool isGameItemMenuOpen = false;
         private ViewModels.IndexFrameViewModel indexFrameViewModel;
         public IndexFrame()
         {
@@ -30,6 +33,11 @@ namespace MyWareHouse.Views
 
             this.indexFrameViewModel = new ViewModels.IndexFrameViewModel();
 
+            this.indexFrameViewModel.selectDfaultItem = () =>
+            {
+                if (this.navview.SelectedItem == null)
+                    this.navview.SelectedItem = (this.navview.FooterMenuItemsSource as System.Collections.ObjectModel.ObservableCollection<GameBar>).First();
+            };
 
             this.init();
         }
@@ -39,9 +47,11 @@ namespace MyWareHouse.Views
             this.DataContext = this.indexFrameViewModel;
 
 
-            indexFrameViewModel.poinerAction = (Frame frame) =>
+            indexFrameViewModel.poinerAction = (Page page,object info, NavigationTransitionInfo transitionInfo) =>
             {
-                this.ContentFrame.Navigate(typeof(Views.IndexGameShowFrame), null, new EntranceNavigationTransitionInfo());
+                Type type = page.GetType();
+                // new EntranceNavigationTransitionInfo() 钻入
+                this.ContentFrame.Navigate(type, info, transitionInfo);
             };
 
             
@@ -49,36 +59,91 @@ namespace MyWareHouse.Views
             return true;
         }
 
-        private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-
-        }
-
         private void leftBar_Loaded(object sender, RoutedEventArgs e)
         {
-            this.navview.SelectedItem = (this.navview.MenuItemsSource as System.Collections.ObjectModel.ObservableCollection<ViewModels.Category>).First();
+            
         }
-
-        private void leftBar_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
+        private void NavigationViewItem_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            if (args.IsSettingsSelected)
+
+            
+            var flyout = FlyoutBase.GetAttachedFlyout((FrameworkElement)sender);
+            var options = new FlyoutShowOptions()
             {
-                this.ContentFrame.Navigate(typeof(Views.SettingFrame), null, new DrillInNavigationTransitionInfo());
-            }
-            else
+                // Position shows the flyout next to the pointer.
+                // "Transient" ShowMode makes the flyout open in its collapsed state.
+                Position = e.GetPosition((FrameworkElement)sender),
+                ShowMode = FlyoutShowMode.Standard
+            };
+            Microsoft.UI.Xaml.Controls.NavigationViewItem navigationViewItem = (Microsoft.UI.Xaml.Controls.NavigationViewItem)sender;
+
+
+
+            if (navigationViewItem.Tag.ToString() == "Game")
             {
 
-                switch (((ViewModels.Category)args.SelectedItem).Tag)
-                {
-                    case "Index":
-                        this.ContentFrame.Navigate(typeof(Views.WarehouseIndexFrame), null);
-                        break;
-                    default:
-                        this.ContentFrame.Navigate(typeof(Views.IndexGameShowFrame), null);
-                        break;
+                IObservableVector<ICommandBarElement> secondaryCommands = GameBarContextMenu.SecondaryCommands;
+
+                for (int index = 0; index < secondaryCommands.Count; index++){
+                    AppBarButton commandBarElement = secondaryCommands[index] as AppBarButton;
+
+                    if (commandBarElement.Tag as string == "MoveTo")
+                    {
+                        commandBarElement.Flyout = new MenuFlyout();
+
+                        IList<Favorite> lists = FavoriteServiceFactory.Getter().GetAllFavorites();
+                        foreach(Favorite favorite in lists)
+                        {
+                            MenuFlyoutItem item = new MenuFlyoutItem();
+                            item.Text = favorite.Name;
+                            item.Tag = favorite;
+                            (commandBarElement.Flyout as MenuFlyout).Items.Add(item);
+                        }
+                    }
                 }
 
+                this.GameBarContextMenu.ShowAt(navigationViewItem, options);
+                isGameItemMenuOpen = true;
             }
+            else if(navigationViewItem.Tag.ToString() == "Favorite" && !isGameItemMenuOpen && navigationViewItem.Content != "未分类")
+            {
+
+                this.FavoriteBarContextMenu.ShowAt(navigationViewItem, options);
+            }
+        }
+
+        private void MenuFlyout_Opening(object sender, object e)
+        {
+            //var se = (MenuFlyout)sender;
+            //IList<MenuFlyoutItemBase> items = se.Items;
+            //MenuFlyoutItemBase menuFlyoutItemBase = items[0];
+            //items.Clear();
+        }
+
+        private void ReName(object sender, RoutedEventArgs e)
+        {
+            //indexFrameViewModel.ReName(sender, e);
+        }
+
+        private void MenuFlyoutItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            
+        }
+
+        private void GameBarContextMenu_Closing(FlyoutBase sender, FlyoutBaseClosingEventArgs args)
+        {
+            //IObservableVector<ICommandBarElement> secondaryCommands = this.GameBarContextMenu.SecondaryCommands;
+
+            //for (int index = 0; index < secondaryCommands.Count; index++)
+            //{
+            //    AppBarButton commandBarElement = secondaryCommands[index] as AppBarButton;
+
+            //    if (commandBarElement.Tag as string == "MoveTo")
+            //    {
+            //        commandBarElement.Flyout = null;
+            //    }
+            //}
+            isGameItemMenuOpen = false;
         }
     }
 }

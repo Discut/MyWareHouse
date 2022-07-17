@@ -2,39 +2,72 @@
     x:Class="MyWareHouse.Views.IndexFrame"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:MyWareHouse.Views"
-    xmlns:viewModels="using:MyWareHouse.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:MyWareHouse.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:MyWareHouse.Models.Data"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:viewModels="using:MyWareHouse.ViewModels"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="{x:Bind indexFrameViewModel.Page_Loaded}"
+    Loading="{x:Bind indexFrameViewModel.Page_Loading}">
 
     <Grid>
         <Grid.Resources>
-            <DataTemplate x:Key="IndexLeftMenuItem" x:DataType="viewModels:Category">
-                <muxc:NavigationViewItem ToolTipService.ToolTip="{x:Bind Name}" Tag="{x:Bind Tag}" Content="{x:Bind Name}" MenuItemsSource="{x:Bind Children}" Icon="{x:Bind Icon}"/>
+            <CommandBarFlyout x:Name="GameBarContextMenu" Closing="GameBarContextMenu_Closing">
+                <CommandBarFlyout.SecondaryCommands>
+                    <AppBarButton Label="重命名" />
+                    <AppBarButton Label="移动到" Tag="MoveTo">
+                        <AppBarButton.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="da" />
+                            </MenuFlyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarButton Label="移出收藏夹" />
+                    <AppBarButton Label="删除此游戏" />
+                </CommandBarFlyout.SecondaryCommands>
+            </CommandBarFlyout>
+            <CommandBarFlyout x:Name="FavoriteBarContextMenu">
+                <CommandBarFlyout.SecondaryCommands>
+                    <AppBarButton Label="重命名" />
+                    <AppBarButton Label="删除收藏夹" />
+                </CommandBarFlyout.SecondaryCommands>
+            </CommandBarFlyout>
+            <DataTemplate x:Key="IndexLeftMenuItem" x:DataType="models:GameBar">
+                <muxc:NavigationViewItem
+                    Content="{x:Bind Title}"
+                    Icon="{x:Bind Icon}"
+                    MenuItemsSource="{x:Bind Children}"
+                    RightTapped="NavigationViewItem_RightTapped"
+                    Tag="{x:Bind Tag}"
+                    ToolTipService.ToolTip="{x:Bind Title}">
+                    <!--<muxc:NavigationViewItem.ContextFlyout>
+                        <MenuFlyout Opening="MenuFlyout_Opening" >
+                            <MenuFlyoutItem Tapped="MenuFlyoutItem_Tapped" Click="ReName" Text="重命名" />
+                        </MenuFlyout>
+                    </muxc:NavigationViewItem.ContextFlyout>-->
+                </muxc:NavigationViewItem>
             </DataTemplate>
             <CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
         </Grid.Resources>
-        <Image Source="/Assets/background_1.jpg"/>
-        <muxc:NavigationView DataContext="indexFrameViewModel" x:Name="navview"
-                             IsTitleBarAutoPaddingEnabled="False"
-                             Loaded="leftBar_Loaded"
-                             SelectionChanged="leftBar_SelectionChanged"
-                            MenuItemsSource="{x:Bind indexFrameViewModel.Categories, Mode=OneWay}"
-                            FooterMenuItemsSource="{x:Bind indexFrameViewModel.FooterMenu, Mode=OneWay}"
-                            MenuItemTemplate="{StaticResource IndexLeftMenuItem}"
-                            ItemInvoked="{x:Bind indexFrameViewModel.OnItemInvoked}"
-                             PaneDisplayMode="Auto">
-            <!--<muxc:NavigationView.MenuItemContainerStyle>
-                <Style TargetType="muxc:NavigationView">
-                    <Setter Property="Background" Value="Orange"/>
-                </Style>
-            </muxc:NavigationView.MenuItemContainerStyle>-->
-            <Frame x:Name="ContentFrame" Background="#fff" Margin="-1,0,0,0" >
+        <muxc:NavigationView
+            x:Name="navview"
+            FooterMenuItemsSource="{x:Bind indexFrameViewModel.FooterMenu, Mode=OneWay}"
+            IsTitleBarAutoPaddingEnabled="False"
+            ItemInvoked="{x:Bind indexFrameViewModel.OnItemInvoked}"
+            Loaded="leftBar_Loaded"
+            MenuItemTemplate="{StaticResource IndexLeftMenuItem}"
+            MenuItemsSource="{x:Bind indexFrameViewModel.Categories, Mode=OneWay}"
+            PaneDisplayMode="Auto"
+            SelectionChanged="{x:Bind indexFrameViewModel.leftBar_SelectionChanged}">
+            <Frame
+                x:Name="ContentFrame"
+                Margin="-1,0,0,0"
+                Background="#fff">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
-                        <NavigationThemeTransition  />
+                        <NavigationThemeTransition />
                     </TransitionCollection>
                 </Frame.ContentTransitions>
             </Frame>
