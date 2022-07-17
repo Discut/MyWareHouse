@@ -25,20 +25,20 @@
                                  resources should be tested with both the light and dark themes,
                                  and specific light or dark resources provided as needed. -->
                             <muxm:AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
-                                   BackgroundSource="Backdrop"
-                                   TintColor="#fff"
-                                   TintOpacity=".2"/>
+                                   
+                                   TintColor="#10893e"
+                                   TintOpacity=".5"/>
                             <!--<muxm:AcrylicBrush x:Key="NavigationViewTopPaneBackground"
                                    BackgroundSource="Backdrop"
                                    TintColor="{ThemeResource SystemAccentColor}"
                                    TintOpacity=".0"/>-->
                             <SolidColorBrush x:Key="NavigationViewTopPaneBackground"
-                                             Opacity="0.1"
-                                             Color="#fff">
+                                             Opacity="0.5"
+                                             Color="#10893e">
                             </SolidColorBrush>
                             <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground"
                                              Opacity="0.5"
-                                             Color="#fff">
+                                             Color="#10893e">
                             </SolidColorBrush>
                             <!--<LinearGradientBrush x:Key="NavigationViewExpandedPaneBackground"
                                      StartPoint="0.5,0" EndPoint="0.5,1">

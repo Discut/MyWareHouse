@@ -12,12 +12,23 @@
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
-    <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+    <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+    <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
+    <PackageCertificateThumbprint>
+    </PackageCertificateThumbprint>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
+    <AppInstallerUri>D:/</AppInstallerUri>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <PackageCertificateKeyFile>MyWareHouse_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -123,9 +134,38 @@
     <Compile Include="Common\MyUserControl1.xaml.cs">
       <DependentUpon>MyUserControl1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\AppInitializer.cs" />
+    <Compile Include="Models\Data\Factory\FavoriteFactory.cs" />
+    <Compile Include="Models\Data\Favorite.cs" />
+    <Compile Include="Models\Data\Game.cs" />
+    <Compile Include="Models\Data\GameBar.cs" />
+    <Compile Include="Models\Data\GameFactory.cs" />
+    <Compile Include="Models\Data\ITransform.cs" />
+    <Compile Include="Models\Data\Link.cs" />
+    <Compile Include="Models\Data\Tag.cs" />
+    <Compile Include="Models\FavoriteService\IFavoriteGetter.cs" />
+    <Compile Include="Models\FavoriteService\FavoriteServiceFactory.cs" />
+    <Compile Include="Models\FavoriteService\IFavoriteSetter.cs" />
+    <Compile Include="Models\FavoriteService\Implement\FavoriteService.cs" />
+    <Compile Include="Models\FileService\BitmapImagePool.cs" />
+    <Compile Include="Models\FileService\Class1.cs" />
+    <Compile Include="Models\FileService\IBitmapImagePool.cs" />
+    <Compile Include="Models\FileService\IImageFileService.cs" />
+    <Compile Include="Models\FileService\ImageFileService.cs" />
+    <Compile Include="Models\GameService\Implement\GameInfoModel.cs" />
+    <Compile Include="Models\GameService\Implement\GameObjectService.cs" />
+    <Compile Include="Models\GameService\Implement\GameServiceFactory.cs" />
+    <Compile Include="Models\GameService\Implement\GameStartByLauncher.cs" />
+    <Compile Include="Models\GameService\IGameGetterService.cs" />
+    <Compile Include="Models\GameService\IGameObjectService.cs" />
+    <Compile Include="Models\GameService\IGameService.cs" />
+    <Compile Include="Models\GameService\IGameStartService.cs" />
+    <Compile Include="Models\GameService\IGameModifyService.cs" />
+    <Compile Include="Models\IAppInitializer.cs" />
     <Compile Include="ViewModels\IndexFrameViewModel.cs" />
     <Compile Include="ViewModels\IndexGameShowFrameViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\WarehouseIndexFrameViewModel.cs" />
     <Compile Include="Views\GameInfoFrame.xaml.cs">
       <DependentUpon>GameInfoFrame.xaml</DependentUpon>
     </Compile>
@@ -152,7 +192,23 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Background\1.jpeg" />
+    <Content Include="Assets\Background\2.jpg" />
     <Content Include="Assets\background_1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Luncher.exe" />
+    <Content Include="Assets\Sql\Favorites.sql" />
+    <Content Include="Assets\Sql\Games_Tags.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sql\Links.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sql\Games.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sql\Tags.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Properties\Default.rd.xml" />
@@ -199,15 +255,38 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite">
+      <Version>2.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Data.Sqlite.Core">
+      <Version>6.0.7</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.10</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.7.1</Version>
     </PackageReference>
+    <PackageReference Include="SQLitePCLRaw.bundle_winsqlite3">
+      <Version>2.1.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="DataAccessLibrary\DataAccessLibrary.csproj">
+      <Project>{9234cc5c-b019-44d6-94f2-715cbb465e14}</Project>
+      <Name>DataAccessLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MyWareHouse_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsDesktop, Version=10.0.18362.0">
+      <Name>Windows Desktop Extensions for the UWP</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataAccess\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

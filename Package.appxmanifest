@@ -4,12 +4,14 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
   IgnorableNamespaces="uap mp">
 
   <Identity
     Name="d36fecad-3a90-4794-a1f8-3aa4021e1530"
-    Publisher="CN=29628"
-    Version="1.0.0.0" />
+    Publisher="CN=Discut"
+    Version="1.0.2.0" />
 
   <mp:PhoneIdentity PhoneProductId="d36fecad-3a90-4794-a1f8-3aa4021e1530" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -40,10 +42,20 @@
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+
+      <Extensions>
+          <desktop:Extension Category="windows.fullTrustProcess" Executable="Assets\Luncher.exe" >
+              <desktop:FullTrustProcess>
+                <desktop:ParameterGroup GroupId="ChromeGroup" Parameters="chrome.exe"/>
+                <desktop:ParameterGroup GroupId="WordGroup" Parameters="WINWORD.exe"/>
+              </desktop:FullTrustProcess>
+          </desktop:Extension>
+       </Extensions>
     </Application>
   </Applications>
 
   <Capabilities>
-    <Capability Name="internetClient" />
+	  <rescap:Capability Name="runFullTrust" />
+	  <Capability Name="internetClient" />
   </Capabilities>
 </Package>
