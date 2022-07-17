@@ -18,8 +18,8 @@ namespace DataAccessLibrary
         /// 查询数据
         /// </summary>
         /// <param name="command">查询命令</param>
-        /// <returns>查询结果阅读器</returns>
-        SqliteDataReader QueryData(string command);
+        /// <returns>查询结果</returns>
+        IList<IList<object>> QueryData(string command);
         /// <summary>
         /// 插入数据
         /// </summary>

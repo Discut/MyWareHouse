@@ -13,12 +13,17 @@ namespace DataAccessLibrary
         /// <summary>
         /// 初始化数据库工厂
         /// </summary>
-        void Init();
+        Task<bool> Init();
         /// <summary>
         /// 获取信息获取器
         /// </summary>
         /// <returns></returns>
         IDataBaseDataGetter GetGetter();
+        /// <summary>
+        /// 获取收藏夹获取器
+        /// </summary>
+        /// <returns></returns>
+        IFavoriteGetter GetFavoriteGetter();
         /// <summary>
         /// 获取游戏信息设置器
         /// </summary>
@@ -34,5 +39,10 @@ namespace DataAccessLibrary
         /// </summary>
         /// <returns></returns>
         ITagSetter GetTagSetter();
+        /// <summary>
+        /// 获取收藏夹设置器
+        /// </summary>
+        /// <returns></returns>
+        IFavoriteSetter GetFavoriteSetter();
     }
 }

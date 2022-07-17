@@ -14,6 +14,12 @@ namespace DataAccessLibrary.DataBaseGetter
         /// <returns>返回以键值对为基础的列表</returns>
         IList<IDictionary<string, object>> GetAllGames();
         /// <summary>
+        /// 获取某收藏夹下所有的游戏
+        /// </summary>
+        /// <param name="id">收藏夹id</param>
+        /// <returns>返回以键值对为基础的列表</returns>
+        IList<IDictionary<string, object>> GetGamesInFavorite(string id);
+        /// <summary>
         /// 获取游戏的tags
         /// </summary>
         /// <param name="gameId">游戏id</param>

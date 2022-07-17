@@ -24,7 +24,7 @@ namespace DataAccessLibrary
         }
 
         private string dbName = "MyWarehouseDB.db";
-        private string[] tables = { @"Assets\Sql\Games.sql", @"Assets\Sql\Links.sql", @"Assets\Sql\Tags.sql", @"Assets\Sql\Games_Tags.sql" };
+        private string[] tables = { @"Assets\Sql\Favorites.sql", @"Assets\Sql\Games.sql", @"Assets\Sql\Links.sql", @"Assets\Sql\Tags.sql", @"Assets\Sql\Games_Tags.sql" };
 
         private DataBaseFactory()
         {
@@ -32,7 +32,7 @@ namespace DataAccessLibrary
 
         public IGameSetter GetGameSetter()
         {
-            throw new NotImplementedException();
+            return new GameSetter();
         }
 
         public IDataBaseDataGetter GetGetter()
@@ -51,7 +51,7 @@ namespace DataAccessLibrary
             throw new NotImplementedException();
         }
 
-        public async void Init()
+        public async Task<bool> Init()
         {
             IDataBaseInitializer dataBaseInitializer = new DataBaseInitializer.DataBaseInitializer();
             // 初始化数据库
@@ -76,6 +76,17 @@ namespace DataAccessLibrary
             //初始化 DataAcess
             DataAccess.GetInstance().InitDataAccess(dbName);
 
+            return true;
+        }
+
+        public IFavoriteSetter GetFavoriteSetter()
+        {
+            return new FavoriteSetter();
+        }
+
+        public IFavoriteGetter GetFavoriteGetter()
+        {
+            return new FavoriteGetter();
         }
     }
 }

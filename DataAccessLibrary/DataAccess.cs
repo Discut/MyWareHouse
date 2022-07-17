@@ -2,6 +2,9 @@
 using Windows.Storage;
 using System.IO;
 using DataAccessLibrary.Exception;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DataAccessLibrary
 {
@@ -55,6 +58,7 @@ namespace DataAccessLibrary
 
         bool IDataAccess.InsertData(string command)
         {
+
             if (command == null)
                 return false;
             CheckDB();
@@ -68,17 +72,19 @@ namespace DataAccessLibrary
 
                 insertCommand.CommandText = command;
 
-                insertCommand.ExecuteReader();
+                SqliteDataReader sqliteDataReader = insertCommand.ExecuteReader();
 
                 db.Close();
             }
             return true;
         }
 
-        SqliteDataReader IDataAccess.QueryData(string command)
-        {
+        IList<IList<object>> IDataAccess.QueryData(string command)
+         {
             if (command == null)
                 return null;
+            ObservableCollection<IList<object>> result = new ObservableCollection<IList<object>>();
+
             CheckDB();
             SqliteDataReader query;
             //链接数据库
@@ -92,10 +98,25 @@ namespace DataAccessLibrary
                 
                 query = selectCommand.ExecuteReader();
 
+                int fieldCount = query.FieldCount;
+
+                while (query.Read())
+                {
+                    ObservableCollection<object> row = new ObservableCollection<object>();
+                    for (int index = 0; index < fieldCount; index++)
+                    {
+                        object value = query.IsDBNull(index) ? null : query.GetString(index);
+                        row.Add(value);
+                        //row[index] = value;
+                    }
+                    result.Add(row);
+                }
+
+
                 db.Close();
             }
 
-            return query;
+            return (IList<IList<object>>)result;
         }
 
         bool IDataAccess.UpdateData(string command)
