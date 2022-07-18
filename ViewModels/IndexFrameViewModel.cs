@@ -62,18 +62,23 @@ namespace MyWareHouse.ViewModels
         public void OnItemInvoked(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs e)
         {
             Microsoft.UI.Xaml.Controls.NavigationViewItem ItemContainer = (Microsoft.UI.Xaml.Controls.NavigationViewItem)e.InvokedItemContainer;
-
-            if (ItemContainer.Tag as String == "AddGame")
+            if (ItemContainer.Tag is GameBar gameBar)
             {
-                IntoFrame(null, "Index");
-                AddNewGame();
+                if (gameBar.Tag as String == "AddGame")
+                {
+                    AddNewGame();
+                }
+                else if (gameBar.Tag as String == "AddFavorite")
+                {
+                    AddFavorite();
+                }
+                else
+                    IntoFrame(sender, gameBar.Tag);
             }
-            else if (ItemContainer.Tag as String == "AddFavorite")
+            else if (e.IsSettingsInvoked)
             {
-                AddFavorite();
+                IntoFrame(sender, "Setting");
             }
-            else
-                IntoFrame(sender, ItemContainer.Tag);
             //sender.Header = invokedItem;
 
             
@@ -93,26 +98,30 @@ namespace MyWareHouse.ViewModels
             //}
         }
 
+        private void FastIntoFrame(string tag, object arg)
+        {
+            switch (tag as string)
+            {
+                case "Game":
+                    this.poinerAction?.Invoke(new Views.GameInfoFrame(), arg, new DrillInNavigationTransitionInfo());
+                    break;
+                case "Index":
+                    this.poinerAction?.Invoke(new Views.WarehouseIndexFrame(), null, new EntranceNavigationTransitionInfo());
+                    break;
+                case "Favorite":
+                    this.poinerAction?.Invoke(new Views.IndexGameShowFrame(), arg, new EntranceNavigationTransitionInfo());
+                    break;
+                case "Setting":
+                    this.poinerAction?.Invoke(new Views.SettingFrame(), null, new EntranceNavigationTransitionInfo());
+                    break;
+            }
+        }
         private void IntoFrame(Microsoft.UI.Xaml.Controls.NavigationView sender, object tag)
         {
             object selectedItem = null;
             if (sender != null)
                 selectedItem = sender.SelectedItem;
-            switch (tag as string)
-                {
-                    case "Game":
-                        this.poinerAction?.Invoke(new Views.GameInfoFrame(), selectedItem, new DrillInNavigationTransitionInfo());
-                        break;
-                    case "Index":
-                        this.poinerAction?.Invoke(new Views.WarehouseIndexFrame(), null, new EntranceNavigationTransitionInfo());
-                        break;
-                    case "Favorite":
-                        this.poinerAction?.Invoke(new Views.IndexGameShowFrame(), selectedItem, new EntranceNavigationTransitionInfo());
-                        break;
-                    case "设置":
-                        this.poinerAction?.Invoke(new Views.SettingFrame(), null, new EntranceNavigationTransitionInfo());
-                        break;
-                }
+            FastIntoFrame(tag as string, selectedItem);
             
         }
 
@@ -174,6 +183,33 @@ namespace MyWareHouse.ViewModels
             };
             await dialog.ShowAsync();
         }
+
+        internal void ReName(GameBar target, string newName)
+        {
+            switch (target.Tag)
+            {
+                case "Game":
+                    Game game = target.Game;
+                    game.Name = newName;
+                    target.Title = newName;
+                    //target.Title = newName;
+                    GameServiceFactory.GetGameModifyService().UpdataGame(game);
+                    Update();
+                    break;
+                case "Favorite":
+                    FavoriteServiceFactory.Setter().Rename(target.Id, newName);
+                    for (int i = 0; i < Categories.Count; i++)
+                    {
+                        if (Categories[i].Id == target.Id)
+                        {
+                            Categories[i].Title = newName;
+                        }
+                    }
+                    Update();
+                    break;
+            }
+        }
+
         /// <summary>
         /// 更新数据
         /// </summary>
@@ -186,6 +222,7 @@ namespace MyWareHouse.ViewModels
             {
                 this.Categories.Add(bar);
             }
+            // 使用默认选择
             selectDfaultItem?.Invoke();
         }
         ///// <summary>
@@ -201,6 +238,7 @@ namespace MyWareHouse.ViewModels
         public void Page_Loading(FrameworkElement sender, object args)
         {
             Update();
+            selectDfaultItem?.Invoke();
         }
 
         public void Page_Loaded(object sender, RoutedEventArgs e)

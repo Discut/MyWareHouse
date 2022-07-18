@@ -16,22 +16,22 @@
         <Grid.Resources>
             <CommandBarFlyout x:Name="GameBarContextMenu" Closing="GameBarContextMenu_Closing">
                 <CommandBarFlyout.SecondaryCommands>
-                    <AppBarButton Label="重命名" />
+                    <AppBarButton Click="ReName" Label="重命名" />
                     <AppBarButton Label="移动到" Tag="MoveTo">
-                        <AppBarButton.Flyout>
+                        <!--<AppBarButton.Flyout>
                             <MenuFlyout>
                                 <MenuFlyoutItem Text="da" />
                             </MenuFlyout>
-                        </AppBarButton.Flyout>
+                        </AppBarButton.Flyout>-->
                     </AppBarButton>
-                    <AppBarButton Label="移出收藏夹" />
-                    <AppBarButton Label="删除此游戏" />
+                    <AppBarButton Click="MoveOutFavorite" Label="移出收藏夹" />
+                    <AppBarButton Click="DeleteGame" Label="删除此游戏" />
                 </CommandBarFlyout.SecondaryCommands>
             </CommandBarFlyout>
             <CommandBarFlyout x:Name="FavoriteBarContextMenu">
                 <CommandBarFlyout.SecondaryCommands>
-                    <AppBarButton Label="重命名" />
-                    <AppBarButton Label="删除收藏夹" />
+                    <AppBarButton Click="ReName" Label="重命名" />
+                    <AppBarButton Click="DeleteFavorite" Label="删除收藏夹" />
                 </CommandBarFlyout.SecondaryCommands>
             </CommandBarFlyout>
             <DataTemplate x:Key="IndexLeftMenuItem" x:DataType="models:GameBar">
@@ -40,14 +40,8 @@
                     Icon="{x:Bind Icon}"
                     MenuItemsSource="{x:Bind Children}"
                     RightTapped="NavigationViewItem_RightTapped"
-                    Tag="{x:Bind Tag}"
-                    ToolTipService.ToolTip="{x:Bind Title}">
-                    <!--<muxc:NavigationViewItem.ContextFlyout>
-                        <MenuFlyout Opening="MenuFlyout_Opening" >
-                            <MenuFlyoutItem Tapped="MenuFlyoutItem_Tapped" Click="ReName" Text="重命名" />
-                        </MenuFlyout>
-                    </muxc:NavigationViewItem.ContextFlyout>-->
-                </muxc:NavigationViewItem>
+                    Tag="{x:Bind Myself}"
+                    ToolTipService.ToolTip="{x:Bind Title}" />
             </DataTemplate>
             <CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
         </Grid.Resources>

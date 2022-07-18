@@ -118,7 +118,8 @@ namespace MyWareHouse.Models.GameService
 
         public bool UpdataGame(Game game)
         {
-            throw new NotImplementedException();
+            DataAccessLibrary.DataBaseFactory.GetInstance().GetGameSetter().UpdateGame(game.toDinctionary());
+            return true;
         }
 
         public Game InsertGame(Game game)

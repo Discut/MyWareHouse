@@ -26,6 +26,13 @@ namespace MyWareHouse.Views
     public sealed partial class IndexFrame : Page
     {
         bool isGameItemMenuOpen = false;
+        /// <summary>
+        /// 右键菜单栏选中的目标
+        /// </summary>
+        private GameBar target;
+        /// <summary>
+        /// 数据绑定
+        /// </summary>
         private ViewModels.IndexFrameViewModel indexFrameViewModel;
         public IndexFrame()
         {
@@ -54,19 +61,15 @@ namespace MyWareHouse.Views
                 this.ContentFrame.Navigate(type, info, transitionInfo);
             };
 
-            
-
+           
             return true;
         }
 
         private void leftBar_Loaded(object sender, RoutedEventArgs e)
         {
-            
         }
         private void NavigationViewItem_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-
-            
             var flyout = FlyoutBase.GetAttachedFlyout((FrameworkElement)sender);
             var options = new FlyoutShowOptions()
             {
@@ -75,12 +78,15 @@ namespace MyWareHouse.Views
                 Position = e.GetPosition((FrameworkElement)sender),
                 ShowMode = FlyoutShowMode.Standard
             };
+            // 获取点击菜单项
             Microsoft.UI.Xaml.Controls.NavigationViewItem navigationViewItem = (Microsoft.UI.Xaml.Controls.NavigationViewItem)sender;
+            // 获取点击菜单项的tag
+            string tag = (navigationViewItem.Tag as GameBar).Tag.ToString();
 
 
-
-            if (navigationViewItem.Tag.ToString() == "Game")
+            if (tag == "Game")
             {
+                this.target = navigationViewItem.Tag as GameBar;
 
                 IObservableVector<ICommandBarElement> secondaryCommands = GameBarContextMenu.SecondaryCommands;
 
@@ -94,9 +100,12 @@ namespace MyWareHouse.Views
                         IList<Favorite> lists = FavoriteServiceFactory.Getter().GetAllFavorites();
                         foreach(Favorite favorite in lists)
                         {
+                            // 创建移动到收藏夹菜单按钮
                             MenuFlyoutItem item = new MenuFlyoutItem();
                             item.Text = favorite.Name;
-                            item.Tag = favorite;
+                            item.Tag = favorite; 
+                            // 绑定事件
+                            item.Click += MoveToFavorite;
                             (commandBarElement.Flyout as MenuFlyout).Items.Add(item);
                         }
                     }
@@ -105,45 +114,64 @@ namespace MyWareHouse.Views
                 this.GameBarContextMenu.ShowAt(navigationViewItem, options);
                 isGameItemMenuOpen = true;
             }
-            else if(navigationViewItem.Tag.ToString() == "Favorite" && !isGameItemMenuOpen && navigationViewItem.Content != "未分类")
+            else if(tag == "Favorite" && !isGameItemMenuOpen && navigationViewItem.Content != "未分类")
             {
+                this.target = navigationViewItem.Tag as GameBar;
 
                 this.FavoriteBarContextMenu.ShowAt(navigationViewItem, options);
             }
         }
 
-        private void MenuFlyout_Opening(object sender, object e)
+        private void MoveToFavorite(object sender, RoutedEventArgs e)
         {
-            //var se = (MenuFlyout)sender;
-            //IList<MenuFlyoutItemBase> items = se.Items;
-            //MenuFlyoutItemBase menuFlyoutItemBase = items[0];
-            //items.Clear();
-        }
-
-        private void ReName(object sender, RoutedEventArgs e)
-        {
-            //indexFrameViewModel.ReName(sender, e);
-        }
-
-        private void MenuFlyoutItem_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            
+            throw new NotImplementedException();
         }
 
         private void GameBarContextMenu_Closing(FlyoutBase sender, FlyoutBaseClosingEventArgs args)
-        {
-            //IObservableVector<ICommandBarElement> secondaryCommands = this.GameBarContextMenu.SecondaryCommands;
-
-            //for (int index = 0; index < secondaryCommands.Count; index++)
-            //{
-            //    AppBarButton commandBarElement = secondaryCommands[index] as AppBarButton;
-
-            //    if (commandBarElement.Tag as string == "MoveTo")
-            //    {
-            //        commandBarElement.Flyout = null;
-            //    }
-            //}
+        { 
             isGameItemMenuOpen = false;
+        }
+
+        private async void ReName(object sender, RoutedEventArgs e)
+        {
+
+            ContentDialog dialog = new ContentDialog()
+            {
+                Title = "请输入新的名称",
+                PrimaryButtonText = "取消",
+                SecondaryButtonText = "确定",
+                FullSizeDesired = false,
+                DefaultButton = ContentDialogButton.Secondary
+            };
+            StackPanel sp = new StackPanel();
+            TextBox titleInput = new TextBox();
+            titleInput.TextWrapping = TextWrapping.NoWrap;
+            titleInput.PlaceholderText = "新名称";
+            sp.Children.Add(titleInput);
+            dialog.Content = sp;
+
+            dialog.SecondaryButtonClick += (_s, _e) => {
+                string title = titleInput.Text;
+
+                indexFrameViewModel.ReName(this.target, title);
+
+
+            };
+            await dialog.ShowAsync();
+        }
+
+        private void DeleteGame(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteFavorite(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void MoveOutFavorite(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

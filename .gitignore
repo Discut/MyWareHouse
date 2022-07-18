@@ -339,3 +339,6 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /WpfApp1
+/Models/GameStartByLauncher.xaml
+/Models/GameStartByLauncher.xaml.cs
+/Models/FileService/Class1.cs
