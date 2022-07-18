@@ -10,7 +10,14 @@ namespace DataAccessLibrary.DataBaseSetter
     {
         public bool DeleteGame(int id)
         {
-            throw new NotImplementedException();
+            if (id < 0)
+                return false;
+
+            IDataAccess dataAccess = DataAccess.GetInstance();
+
+            dataAccess.DeleteData(id, "Games");
+
+            return true;
         }
 
         public IDictionary<string, object> InsertGame(IDictionary<string, object> gameInfo)
