@@ -22,7 +22,7 @@ namespace DataAccessLibrary.DataBaseSetter
 
 
             string command = "INSERT INTO Games(name,info,path,barImgPath,coverImgPath,evaluation,favoriteId) VALUES ('" +
-                (gameInfo.ContainsKey("name") ? gameInfo["name"].ToString() : null) + "','"+
+                (gameInfo.ContainsKey("name") ? gameInfo["name"].ToString() : null) + "','" +
                 (gameInfo.ContainsKey("info") ? gameInfo["info"].ToString() : null) + "','" +
                 (gameInfo.ContainsKey("path") ? gameInfo["path"].ToString() : null) + "','" +
                 (gameInfo.ContainsKey("barImgPath") ? gameInfo["barImgPath"].ToString() : null) + "','" +
@@ -52,7 +52,17 @@ namespace DataAccessLibrary.DataBaseSetter
 
         public bool UpdateGame(IDictionary<string, object> data)
         {
-            throw new NotImplementedException();
+            IDataAccess dataAccess = DataAccess.GetInstance();
+
+            string command = "UPDATE Games SET" + " name='" + data["name"].ToString() + "'" +
+                (data.ContainsKey("info") ? ",info='" + data["info"].ToString() : null) + "'" +
+                (data.ContainsKey("favoriteId") ? (data["favoriteId"] != null ? (",favoriteId=" + data["favoriteId"]) : null) : null) +
+                (data.ContainsKey("evaluation") ? ",evaluation='" + data["evaluation"].ToString() : null) + "'" +
+                (data.ContainsKey("path") ? ",path='" + data["path"].ToString() : null) + "'" +
+                " WHERE id=" + data["id"];
+
+            dataAccess.UpdateData(command);
+            return true;
         }
     }
 }

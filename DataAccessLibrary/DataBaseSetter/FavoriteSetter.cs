@@ -10,7 +10,13 @@ namespace DataAccessLibrary.DataBaseSetter
     {
         public bool DeleteFavorite(int id)
         {
-            throw new NotImplementedException();
+            if (id < 0)
+                return false;
+            IDataAccess dataAccess = DataAccess.GetInstance();
+
+            string command = "DELETE FROM Favorites WHERE id=" + id;
+            dataAccess.UpdateData(command);
+            return true;
         }
 
         public IDictionary<string, object> InsertFavorite(IDictionary<string, object> favoriteInfo)
@@ -30,7 +36,12 @@ namespace DataAccessLibrary.DataBaseSetter
 
         public bool UpdateFavorite(IDictionary<string, object> data)
         {
-            throw new NotImplementedException();
+            IDataAccess dataAccess = DataAccess.GetInstance();
+
+            string command = "UPDATE Favorites SET name='" + (data.ContainsKey("name") ? data["name"].ToString() : null) + "' WHERE id=" + (data.ContainsKey("id") ? data["id"].ToString() : null);
+            dataAccess.UpdateData(command);
+
+            return true;
         }
     }
 }
