@@ -36,5 +36,13 @@ namespace MyWareHouse.Models.FavoriteService.Implement
             }
             return result;
         }
+
+        public void Rename(string id, string newName)
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            dic.Add("id", id);
+            dic.Add("name", newName);
+            DataAccessLibrary.DataBaseFactory.GetInstance().GetFavoriteSetter().UpdateFavorite(dic);
+        }
     }
 }
