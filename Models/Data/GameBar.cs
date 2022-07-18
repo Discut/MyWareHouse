@@ -10,12 +10,13 @@ namespace MyWareHouse.Models.Data
 {
     class GameBar
     {
-        public GameBar(Game game) { 
+        public GameBar(Game game) {
             if (null != game)
             {
                 this.Game = game;
                 Title = game.Name;
                 Tag = "Game";
+                Id = game.Id;
             }
             else
             {
@@ -29,6 +30,7 @@ namespace MyWareHouse.Models.Data
         public IconElement Icon { get; set; }
         public ObservableCollection<GameBar> Children { get; set; }
         public Game Game { get; }
+        public GameBar Myself { get { return this; } }
         private string[] _showTitle= new string[0];
 
         public string[] ShowTitle { 

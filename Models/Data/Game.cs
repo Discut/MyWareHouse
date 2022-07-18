@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyWareHouse.Models.Data
 {
-    class Game
+    class Game : ITransform
     {
         internal Game() { }
 
@@ -87,5 +87,18 @@ namespace MyWareHouse.Models.Data
             set { _id = value; }
         }
 
+        public IDictionary<string, object> toDinctionary()
+        {
+            var dic = new Dictionary<string, object>();
+            dic.Add("id", Id);
+            dic.Add("name", Name);
+            dic.Add("info", Info);
+            dic.Add("favoriteId", FavoriteId);
+            dic.Add("evaluation", Evaluation);
+            dic.Add("barImgPath", BarImgPath);
+            dic.Add("coverImgPath", CoverImgPath);
+            dic.Add("path", ApplicationPath);
+            return dic;
+        }
     }
 }
