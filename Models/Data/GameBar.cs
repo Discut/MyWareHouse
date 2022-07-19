@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MyWareHouse.Models.ThemeService;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace MyWareHouse.Models.Data
 {
@@ -23,6 +25,8 @@ namespace MyWareHouse.Models.Data
                 Tag = "Favorite";
             }
 
+            TitleColor = ThemeFactory.Instance.Theme.GameBarColor;
+
         }
         public string Id { get; set; }
         public string Title { get; set; }
@@ -33,6 +37,7 @@ namespace MyWareHouse.Models.Data
         public GameBar Myself { get { return this; } }
         private string[] _showTitle= new string[0];
         public DateTime play;
+        public Brush TitleColor;
 
         public string[] ShowTitle { 
             get
