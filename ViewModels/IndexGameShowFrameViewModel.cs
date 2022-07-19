@@ -1,5 +1,7 @@
 ﻿using MyWareHouse.Models.Data;
 using MyWareHouse.Models.Data.Factory;
+using MyWareHouse.Models.ThemeService;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +12,17 @@ using Windows.UI.Xaml;
 
 namespace MyWareHouse.ViewModels
 {
-    class IndexGameShowFrameViewModel
+    class IndexGameShowFrameViewModel : BindableBase
     {
-
+        private ThemeFactory _theme;
+        /// <summary>
+        /// 主题工厂
+        /// </summary>
+        public ThemeFactory ThemeFactory
+        {
+            get { return _theme; }
+            set { SetProperty(ref _theme, value); }
+        }
         /// <summary>
         /// 标题
         /// </summary>

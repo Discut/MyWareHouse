@@ -12,22 +12,40 @@ using Windows.UI.Xaml;
 using MyWareHouse.Models.GameService;
 using MyWareHouse.Models.FavoriteService;
 using MyWareHouse.Models.GameService.Implement;
+using Prism.Mvvm;
+using MyWareHouse.Models.ThemeService;
 
 namespace MyWareHouse.ViewModels
 {
-    class IndexFrameViewModel
+    class IndexFrameViewModel : BindableBase
     {
         private bool isChangeToIndex = false;
+        private ThemeFactory _theme;
+        /// <summary>
+        /// 主题工厂
+        /// </summary>
+        public ThemeFactory ThemeFactory
+        {
+            get { return _theme; }
+            set { SetProperty(ref _theme, value); }
+        }
         public Action<Page, object, Windows.UI.Xaml.Media.Animation.NavigationTransitionInfo> poinerAction;
-
+        /// <summary>
+        /// 默认选择调用方法
+        /// </summary>
         public Action selectDfaultItem;
 
         public IndexFrameViewModel()
         {
+            this.ThemeFactory = ThemeFactory.Instance;
         }
-
+        /// <summary>
+        /// 侧边栏绘制源
+        /// </summary>
         public ObservableCollection<GameBar> Categories = new ObservableCollection<GameBar>();
-
+        /// <summary>
+        /// footer栏绘制源
+        /// </summary>
         private ObservableCollection<GameBar> _footerMenu = new ObservableCollection<GameBar>()
         {
             new GameBar(null)
@@ -58,7 +76,11 @@ namespace MyWareHouse.ViewModels
             set { _footerMenu = value; }
         }
 
-
+        /// <summary>
+        /// 侧边栏某一模块被选中
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnItemInvoked(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs e)
         {
             Microsoft.UI.Xaml.Controls.NavigationViewItem ItemContainer = (Microsoft.UI.Xaml.Controls.NavigationViewItem)e.InvokedItemContainer;
@@ -104,8 +126,8 @@ namespace MyWareHouse.ViewModels
         {
             switch (tag as string)
             {
-                case "Game":
-                    this.poinerAction?.Invoke(new Views.GameInfoFrame(), arg, new DrillInNavigationTransitionInfo());
+                case "Game"://new DrillInNavigationTransitionInfo()
+                    this.poinerAction?.Invoke(new Views.GameInfoFrame(), arg, new EntranceNavigationTransitionInfo());
                     break;
                 case "Index":
                     this.poinerAction?.Invoke(new Views.WarehouseIndexFrame(), null, new EntranceNavigationTransitionInfo());

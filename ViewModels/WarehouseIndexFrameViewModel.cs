@@ -7,19 +7,65 @@ using System.Text;
 using System.Threading.Tasks;
 using MyWareHouse.Models.GameService;
 using MyWareHouse.Models.GameService.Implement;
+using Prism.Mvvm;
+using MyWareHouse.Models.ThemeService;
 
 namespace MyWareHouse.ViewModels
 {
-    class WarehouseIndexFrameViewModel
+    class WarehouseIndexFrameViewModel : BindableBase
     {
+        private string _accountName;
+        private string _weekTitle;
+        private string _hello;
+        /// <summary>
+        /// 问好
+        /// </summary>
+        public string Hello { 
+            get {
+                return _hello;
+            }
+            set
+            {
+                this.SetProperty(ref _hello, value);
+            } 
+        }
+        /// <summary>
+        /// 星期几
+        /// </summary>
+        public string WeekTitle
+        {
+            get => _weekTitle;
+            set
+            {
+                this.SetProperty(ref _weekTitle, value);
+            }
+        }
+
+        public string AcountName
+        {
+            get { return _accountName; }
+            set { this.SetProperty(ref _accountName, value); }
+        }
+
         public List<GameBar> AllGames { get; set; }
 
         public List<GameBar> LastPlyGames { get; set; }
+
+        private ThemeFactory _theme;
+        /// <summary>
+        /// 主题工厂
+        /// </summary>
+        public ThemeFactory ThemeFactory
+        {
+            get { return _theme; }
+            set { SetProperty(ref _theme, value); }
+        }
 
         public WarehouseIndexFrameViewModel()
         {
             this.AllGames = new List<GameBar>();
             this.LastPlyGames = new List<GameBar>();
+            ThemeFactory = ThemeFactory.Instance;
 
 
             IList<GameBar> games = GameServiceFactory.GetGameGetterService().GetGameBarList();
@@ -50,6 +96,9 @@ namespace MyWareHouse.ViewModels
             {
                 return DateTime.Compare(g2.play, g1.play);
             });
+
+
+
         }
     }
 }
