@@ -31,5 +31,10 @@ namespace DataAccessLibrary.DataBaseGetter
         /// <param name="gameId">游戏id</param>
         /// <returns>返回以键值对为基础的列表</returns>
         IList<IDictionary<string, object>> GetGameLinks(int gameId);
+        /// <summary>
+        /// 获取游玩记录
+        /// </summary>
+        /// <returns>游玩记录</returns>
+        IList<IDictionary<string, object>> GetAllPlays();
     }
 }

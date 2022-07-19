@@ -19,6 +19,7 @@ using Microsoft.Data.Sqlite;
 using Windows.Storage;
 using DataAccessLibrary;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Json;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -48,5 +49,11 @@ namespace MyWareHouse.Views
             //System.Diagnostics.Process.Start(@"E:\Game\1room\Windows\1room.exe");
             this.IndexFrame.Navigate(typeof(Views.IndexFrame), null, new DrillInNavigationTransitionInfo());
         }
+    }
+    [Serializable]
+    class LastPlay
+    {
+        internal string id;
+        internal DateTime date;
     }
 }

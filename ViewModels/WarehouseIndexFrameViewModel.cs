@@ -26,8 +26,30 @@ namespace MyWareHouse.ViewModels
 
             foreach(GameBar gameBar in games)
             {
-                AllGames.AddRange(gameBar.Children.ToArray());
+                GameBar[] gameBars = gameBar.Children.ToArray();
+                AllGames.AddRange(gameBars);
             }
+
+            IList<IDictionary<string, object>> lists = GameServiceFactory.GetGameGetterService().GetAllPlays();
+
+            foreach (Dictionary<string, object> dic in lists)
+            {
+                foreach (GameBar gameBar in AllGames)
+                {
+                    if (dic["gameId"] as string == gameBar.Game.Id)
+                    {   if (gameBar.play.DayOfYear == 1)
+                        {
+                            gameBar.play = Convert.ToDateTime(dic["playTime"].ToString());
+                            LastPlyGames.Add(gameBar);
+                        }
+                    }
+                }
+                
+            }
+            LastPlyGames.Sort((GameBar g1, GameBar g2) =>
+            {
+                return DateTime.Compare(g2.play, g1.play);
+            });
         }
     }
 }

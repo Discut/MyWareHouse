@@ -17,11 +17,13 @@ namespace MyWareHouse.Models.GameService
         /// 获取游戏启动服务的实例
         /// </summary>
         /// <returns></returns>
-        public static IGameStartService GetInstance() { return Inner.gameStartService; }
+        public static IGameStartService Instance { get { return Inner.gameStartService; } }
         public bool StartGame(Game game)
         {
             string path = game.ApplicationPath;
             Windows.System.Launcher.LaunchUriAsync(new Uri("MyWarehouse://"+path));
+
+            GameServiceFactory.GetGameModifyService().InsertPlay(game.Id, DateTime.Now);
             return true;
         }
 

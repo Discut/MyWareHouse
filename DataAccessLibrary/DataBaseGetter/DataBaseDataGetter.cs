@@ -16,11 +16,11 @@ namespace DataAccessLibrary.DataBaseGetter
             ObservableCollection<IDictionary<string, object>> gameInfoList = new ObservableCollection<IDictionary<string, object>>();
             // 调用数据库
             IDataAccess dataAccess = DataAccess.GetInstance();
-            string command = "SELECT id,name,info,path,barImgPath,coverImgPath,evaluation,favoriteId FROM Games ";
+            string command = "SELECT id,name,info,path,evaluation,favoriteId FROM Games ";
             IList<IList<object>> lists = dataAccess.QueryData(command);
             foreach(IList<object> list in lists)
             {
-                string[] keys = { "id", "name", "info", "path", "barImgPath", "coverImgPath", "evaluation", "favoriteId" };
+                string[] keys = { "id", "name", "info", "path", "evaluation", "favoriteId" };
                 IDictionary<string, object> gameInfo = Utili.DataTransiform.List2Dictionary(keys, list);
 
                 //Dictionary<string, object> gameInfo = new Dictionary<string, object>();
@@ -39,6 +39,25 @@ namespace DataAccessLibrary.DataBaseGetter
             return gameInfoList;
         }
 
+        public IList<IDictionary<string, object>> GetAllPlays()
+        {
+            // 定义返回对象
+            ObservableCollection<IDictionary<string, object>> playList = new ObservableCollection<IDictionary<string, object>>();
+            // 调用数据库
+            IDataAccess dataAccess = DataAccess.GetInstance();
+            string command = "SELECT gameId,playTime FROM GamePlays ORDER BY playTime DESC LIMIT 6";
+            IList<IList<object>> lists = dataAccess.QueryData(command);
+            foreach (IList<object> list in lists)
+            {
+                string[] keys = { "gameId", "playTime"};
+                IDictionary<string, object> gameInfo = Utili.DataTransiform.List2Dictionary(keys, list);
+                playList.Add(gameInfo);
+            }
+
+            return playList;
+
+        }
+
         public IList<IDictionary<string, object>> GetGameLinks(int gameId)
         {
             throw new NotImplementedException();
@@ -50,11 +69,11 @@ namespace DataAccessLibrary.DataBaseGetter
             ObservableCollection<IDictionary<string, object>> gameInfoList = new ObservableCollection<IDictionary<string, object>>();
             // 调用数据库
             IDataAccess dataAccess = DataAccess.GetInstance();
-            string command = "SELECT id,name,info,path,barImgPath,coverImgPath,evaluation,favoriteId FROM Games WHERE favoriteId=" + (id == null ? "''" : id);
+            string command = "SELECT id,name,info,path,evaluation,favoriteId FROM Games WHERE favoriteId=" + (id == null ? "''" : id);
             IList<IList<object>> lists = dataAccess.QueryData(command);
             foreach(IList<object> list in lists)
             {
-                string[] keys = { "id", "name", "info", "path", "barImgPath", "coverImgPath", "evaluation", "favoriteId" };
+                string[] keys = { "id", "name", "info", "path", "evaluation", "favoriteId" };
                 IDictionary<string, object> gameInfo = Utili.DataTransiform.List2Dictionary(keys, list);
                 gameInfoList.Add(gameInfo);
             }

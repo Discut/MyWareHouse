@@ -12,8 +12,6 @@ namespace MyWareHouse.Models.Data
 
         private string _name;
         private string _id;
-        private string _barImgPath;
-        private string _coverImgPath;
         private string _applicationPath;
         private string _favorite = "未分类";
         private string _favoriteId;
@@ -59,21 +57,6 @@ namespace MyWareHouse.Models.Data
             set { _favorite = value; }
         }
 
-
-        public string CoverImgPath
-        {
-            get { return _coverImgPath; }
-            set { _coverImgPath = value; }
-        }
-
-
-        public string BarImgPath
-        {
-            get { return _barImgPath; }
-            set { _barImgPath = value; }
-        }
-
-
         public string Name
         {
             get { return _name; }
@@ -95,8 +78,6 @@ namespace MyWareHouse.Models.Data
             dic.Add("info", Info);
             dic.Add("favoriteId", FavoriteId);
             dic.Add("evaluation", Evaluation);
-            dic.Add("barImgPath", BarImgPath);
-            dic.Add("coverImgPath", CoverImgPath);
             dic.Add("path", ApplicationPath);
             return dic;
         }

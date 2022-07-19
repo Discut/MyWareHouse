@@ -40,7 +40,7 @@ namespace MyWareHouse.Models.GameService
         /// <returns>游戏启动服务实例</returns>
         public static IGameStartService GetGameStartService()
         {
-            return GameStartByLauncher.GetInstance();
+            return GameStartByLauncher.Instance;
         }
         // 单例模式
         private static GameServiceFactory GetInstance()
@@ -90,29 +90,6 @@ namespace MyWareHouse.Models.GameService
             }
             //将装载好的一个侧边栏放入侧边栏列表里
             gameBars.Add(unfavoriteItem);
-
-            //IDictionary<string, IList<Game>> dictionaries = GameObjectService.GetService().GetDictionaryByFavorite();
-            //ICollection<string> favorites = dictionaries.Keys;
-            //foreach(string favorite in favorites)
-            //{
-            //    GameBar favoriteItem = new GameBar(null);
-            //    favoriteItem.Title = favorite;
-            //    favoriteItem.Icon = new SymbolIcon(Symbol.Favorite);
-            //    IList<Game> games = dictionaries[favorite];
-            //    if(games.Count != 0)
-            //    {
-            //        favoriteItem.Children = new System.Collections.ObjectModel.ObservableCollection<GameBar>();
-
-            //        foreach (Game game in games)
-            //        {
-            //            //未设置Icon
-            //            GameBar gameBar = new GameBar(game);
-            //            favoriteItem.Children.Add(gameBar);
-            //        }
-            //    }
-            //    gameBars.Add(favoriteItem);
-            //}
-
             return gameBars;
         }
 
@@ -134,6 +111,46 @@ namespace MyWareHouse.Models.GameService
             IDictionary<string, object> newGameInfo = setter.InsertGame(info);
 
             return GameFactory.GetGame(newGameInfo);
+        }
+
+        public Game DeleteGame(Game game)
+        {
+            // 引入设置服务
+            DataAccessLibrary.DataBaseSetter.IGameSetter setter = DataAccessLibrary.DataBaseFactory.GetInstance().GetGameSetter();
+
+            setter.DeleteGame(int.Parse(game.Id));
+
+            return game;
+        }
+        public IList<Game> GetAllGamesBy(Favorite favorite)
+        {
+            // 定义返回对象
+            ObservableCollection<Game> result = new ObservableCollection<Game>();
+            // 引入设置服务
+            DataAccessLibrary.DataBaseGetter.IDataBaseDataGetter getter = DataAccessLibrary.DataBaseFactory.GetInstance().GetGetter();
+
+            IList<IDictionary<string, object>> lists = getter.GetGamesInFavorite(favorite.Id);
+
+            foreach(IDictionary<string, object> dic in lists)
+            {
+                Game game = GameFactory.GetGame(dic);
+                result.Add(game);
+            }
+
+            return result;
+        }
+
+        public IList<IDictionary<string, object>> GetAllPlays()
+        {
+            // 引入设置服务
+            DataAccessLibrary.DataBaseGetter.IDataBaseDataGetter getter = DataAccessLibrary.DataBaseFactory.GetInstance().GetGetter();
+            return getter.GetAllPlays();
+        }
+
+        public void InsertPlay(string gameId, DateTime time)
+        {
+            // 引入设置服务
+            DataAccessLibrary.DataBaseFactory.GetInstance().GetGameSetter().InsertGamePlay(gameId, time);
         }
     }
 }

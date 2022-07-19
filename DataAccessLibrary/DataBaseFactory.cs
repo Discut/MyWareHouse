@@ -24,7 +24,7 @@ namespace DataAccessLibrary
         }
 
         private string dbName = "MyWarehouseDB.db";
-        private string[] tables = { @"Assets\Sql\Favorites.sql", @"Assets\Sql\Games.sql", @"Assets\Sql\Links.sql", @"Assets\Sql\Tags.sql", @"Assets\Sql\Games_Tags.sql" };
+        private string[] tables = { @"Assets\Sql\Favorites.sql", @"Assets\Sql\Games.sql", @"Assets\Sql\Links.sql", @"Assets\Sql\Tags.sql", @"Assets\Sql\Games_Tags.sql", @"Assets\Sql\GamePlays.sql" };
 
         private DataBaseFactory()
         {

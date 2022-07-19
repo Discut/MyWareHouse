@@ -23,6 +23,13 @@ namespace MyWareHouse.Models.FavoriteService.Implement
             return FavoriteFactory.GetFavorite(newFavorite);
         }
 
+        public bool DeleteFavorite(string id)
+        {
+            DataAccessLibrary.DataBaseSetter.IFavoriteSetter setter = DataAccessLibrary.DataBaseFactory.GetInstance().GetFavoriteSetter();
+            setter.DeleteFavorite(int.Parse(id));
+            return true;
+        }
+
         public IList<Favorite> GetAllFavorites()
         {
             // 创建返回对象

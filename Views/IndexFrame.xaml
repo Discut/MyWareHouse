@@ -9,10 +9,12 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:viewModels="using:MyWareHouse.ViewModels"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    Loaded="{x:Bind indexFrameViewModel.Page_Loaded}"
     Loading="{x:Bind indexFrameViewModel.Page_Loading}">
 
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/background_1.jpg" Stretch="Fill" />
+        </Grid.Background>
         <Grid.Resources>
             <CommandBarFlyout x:Name="GameBarContextMenu" Closing="GameBarContextMenu_Closing">
                 <CommandBarFlyout.SecondaryCommands>
@@ -58,7 +60,10 @@
             <Frame
                 x:Name="ContentFrame"
                 Margin="-1,0,0,0"
-                Background="#fff">
+                HorizontalAlignment="Stretch">
+                <Frame.Background>
+                    <SolidColorBrush Opacity="0" Color="Orange" />
+                </Frame.Background>
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition />

@@ -35,8 +35,6 @@ namespace MyWareHouse.Models.GameService.Implement
                     gameInfo["id"].ToString(),
                     (string)gameInfo["name"],
                     (string)gameInfo["info"],
-                    (string)gameInfo["barImgPath"],
-                    (string)gameInfo["coverImgPath"],
                     (string)gameInfo["path"],
                     (string)gameInfo["evaluation"]);
 

@@ -54,7 +54,6 @@
                 <Image
                     Width="200"
                     Height="300"
-                    Source="/Assets/background_1.jpg"
                     Stretch="UniformToFill"
                     Visibility="Collapsed" />
                 <Grid>

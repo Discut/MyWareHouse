@@ -19,6 +19,7 @@ using Windows.ApplicationModel;
 using Windows.Storage;
 using MyWareHouse.Models.Data;
 using MyWareHouse.Models.FileService;
+using MyWareHouse.Models.GameService;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -82,7 +83,10 @@ namespace MyWareHouse.Views
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
 
-            Windows.System.Launcher.LaunchUriAsync(new Uri("MyWarehouse://" + appPath));
+            IGameStartService service = GameStartByLauncher.Instance;
+            service.StartGame(game);
+
+            //Windows.System.Launcher.LaunchUriAsync(new Uri("MyWarehouse://" + appPath));
 
             //try
             //{

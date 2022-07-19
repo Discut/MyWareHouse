@@ -20,5 +20,11 @@ namespace MyWareHouse.Models.FavoriteService
         /// <param name="id">收藏夹id</param>
         /// <param name="newName">新名称</param>
         void Rename(string id, string newName);
+        /// <summary>
+        /// 删除收藏夹
+        /// </summary>
+        /// <param name="id">收藏夹id</param>
+        /// <returns>isSuccess</returns>
+        bool DeleteFavorite(string id);
     }
 }

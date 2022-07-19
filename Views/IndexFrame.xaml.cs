@@ -122,10 +122,6 @@ namespace MyWareHouse.Views
             }
         }
 
-        private void MoveToFavorite(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
         private void GameBarContextMenu_Closing(FlyoutBase sender, FlyoutBaseClosingEventArgs args)
         { 
@@ -159,19 +155,34 @@ namespace MyWareHouse.Views
             };
             await dialog.ShowAsync();
         }
+        private void MoveToFavorite(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuFlyoutItem container)
+                indexFrameViewModel.MoveToFavorite(container.Tag, target);
+        }
 
         private void DeleteGame(object sender, RoutedEventArgs e)
         {
-
+            if (sender is AppBarButton container)
+            {
+                indexFrameViewModel.DeleteGame(target);
+            }
         }
 
         private void DeleteFavorite(object sender, RoutedEventArgs e)
         {
-
+            if (sender is AppBarButton container)
+            {
+                Dictionary<string, object> dic = new Dictionary<string, object>();
+                dic.Add("id", target.Id);
+                dic.Add("name", target.Title);
+                Favorite favorite = Models.Data.Factory.FavoriteFactory.GetFavorite(dic);
+                indexFrameViewModel.DeleteFavorite(favorite);
+            }
         }
         private void MoveOutFavorite(object sender, RoutedEventArgs e)
         {
-
+            indexFrameViewModel.MoveOutFavorite(target);
         }
     }
 }

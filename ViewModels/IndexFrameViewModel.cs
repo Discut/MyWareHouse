@@ -62,6 +62,8 @@ namespace MyWareHouse.ViewModels
         public void OnItemInvoked(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs e)
         {
             Microsoft.UI.Xaml.Controls.NavigationViewItem ItemContainer = (Microsoft.UI.Xaml.Controls.NavigationViewItem)e.InvokedItemContainer;
+            if (ItemContainer == null)
+                return;
             if (ItemContainer.Tag is GameBar gameBar)
             {
                 if (gameBar.Tag as String == "AddGame")
@@ -225,25 +227,64 @@ namespace MyWareHouse.ViewModels
             // 使用默认选择
             selectDfaultItem?.Invoke();
         }
-        ///// <summary>
-        ///// 重名名游戏
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //public void ReName(object sender, RoutedEventArgs e)
-        //{
-
-        //}
-
+        /// <summary>
+        /// 页面加载中
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public void Page_Loading(FrameworkElement sender, object args)
         {
             Update();
             selectDfaultItem?.Invoke();
         }
-
-        public void Page_Loaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 把游戏移动至某收藏夹
+        /// </summary>
+        /// <param name="sender">目标收藏夹</param>
+        /// <param name="target">游戏对象</param>
+        internal void MoveToFavorite(object sender, GameBar target)
         {
+            Game game = target.Game;
+            if (null == game)
+                return;
+            if (sender is Favorite favorite)
+            {
+                game.FavoriteId = favorite.Id;
+                GameServiceFactory.GetGameModifyService().UpdataGame(game);
+                Update();
 
+            }
+        }
+        internal void DeleteGame(GameBar target)
+        {
+            if (null == target)
+                return;
+            GameServiceFactory.GetGameModifyService().DeleteGame(target.Game);
+            Update();
+        }
+
+        internal void DeleteFavorite(Favorite target)
+        {
+            if (null == target)
+                return;
+            IList<Game> games = GameServiceFactory.GetGameGetterService().GetAllGamesBy(target);
+            foreach(Game game in games)
+            {
+                game.FavoriteId = "";
+                GameServiceFactory.GetGameModifyService().UpdataGame(game);
+            }
+            FavoriteServiceFactory.Setter().DeleteFavorite(target.Id);
+            Update();
+        }
+        internal void MoveOutFavorite(GameBar target)
+        {
+            if (null == target)
+                return;
+            Game game = target.Game;
+            game.FavoriteId = "";
+            game.Favorite = "";
+            GameServiceFactory.GetGameModifyService().UpdataGame(game);
+            Update();
         }
     }
 }

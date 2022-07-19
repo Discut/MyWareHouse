@@ -30,41 +30,18 @@ namespace MyWareHouse.Views
 
         private Models.Data.GameBar _gameBar;
 
-        public List<ViewModels.GameBarItem> gameBarItem = new List<ViewModels.GameBarItem>() {
-        new ViewModels.GameBarItem()
-        {
-            Title="1232"
-        },
-        new ViewModels.GameBarItem()
-        {
-            Title="1232"
-        },
-        new ViewModels.GameBarItem(),
-        new ViewModels.GameBarItem(),
-        new ViewModels.GameBarItem(),
-        new ViewModels.GameBarItem(),
-        new ViewModels.GameBarItem(),
-        new ViewModels.GameBarItem(),
-        new ViewModels.GameBarItem(),
-        };
-
-
         public WarehouseIndexFrame()
         {
             this.InitializeComponent();
 
-            this.DataContext = viewModel = new WarehouseIndexFrameViewModel();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            GameBar gameBar = e.Parameter as GameBar;
-            if (gameBar != null)
-            {
-                viewModel.AllGames.AddRange(gameBar.Children);
 
-            }
+            this.DataContext = viewModel = new WarehouseIndexFrameViewModel();
+
 
         }
         /**

@@ -162,6 +162,7 @@
     <Compile Include="Models\GameService\IGameStartService.cs" />
     <Compile Include="Models\GameService\IGameModifyService.cs" />
     <Compile Include="Models\IAppInitializer.cs" />
+    <Compile Include="Models\SettingService\ISettingService.cs" />
     <Compile Include="ViewModels\IndexFrameViewModel.cs" />
     <Compile Include="ViewModels\IndexGameShowFrameViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
@@ -182,6 +183,9 @@
     <Compile Include="Views\SettingFrame.xaml.cs">
       <DependentUpon>SettingFrame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\testViewsa\NavigationItem.xaml.cs">
+      <DependentUpon>NavigationItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WarehouseIndexFrame.xaml.cs">
       <DependentUpon>WarehouseIndexFrame.xaml</DependentUpon>
     </Compile>
@@ -199,6 +203,7 @@
     </Content>
     <Content Include="Assets\Luncher.exe" />
     <Content Include="Assets\Sql\Favorites.sql" />
+    <Content Include="Assets\Sql\GamePlays.sql" />
     <Content Include="Assets\Sql\Games_Tags.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -246,6 +251,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SettingFrame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\testViewsa\NavigationItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
