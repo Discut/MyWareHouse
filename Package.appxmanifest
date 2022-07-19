@@ -57,5 +57,6 @@
   <Capabilities>
 	  <rescap:Capability Name="runFullTrust" />
 	  <Capability Name="internetClient" />
+	  <uap:Capability Name="userAccountInformation"/>
   </Capabilities>
 </Package>

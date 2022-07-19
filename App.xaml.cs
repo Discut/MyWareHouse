@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 using MyWareHouse.Views;
 using Windows.ApplicationModel.Core;
+using MyWareHouse.Models.ThemeService;
 
 namespace MyWareHouse
 {
@@ -75,13 +76,7 @@ namespace MyWareHouse
                 Window.Current.Activate();
 
 
-                // Hide default title bar.
-                var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-                coreTitleBar.ExtendViewIntoTitleBar = true;
-
-                var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
-                titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
-                titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
+                
             }
         }
 
