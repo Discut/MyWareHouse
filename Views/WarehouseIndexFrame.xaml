@@ -2,19 +2,24 @@
     x:Class="MyWareHouse.Views.WarehouseIndexFrame"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:MyWareHouse.Views"
+    xmlns:common="using:MyWareHouse.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:MyWareHouse.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="using:MyWareHouse.Models.Data"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:viewModels="using:MyWareHouse.ViewModels"
-    xmlns:model="using:MyWareHouse.Models.Data"
-    xmlns:common="using:MyWareHouse.Common"
-    mc:Ignorable="d"
-    Background="#00000000">
+    Background="#00000000"
+    Loading="Page_Loading"
+    mc:Ignorable="d">
 
     <Page.Resources>
-        <DataTemplate x:Key="ImageTemplate" x:DataType="model:GameBar">
-            <!--<StackPanel
+        <ResourceDictionary Source="/Assets/Theme/DefaultTheme.xaml" />
+    </Page.Resources>
+    <Grid HorizontalAlignment="Stretch">
+        <Grid.Resources>
+            <DataTemplate x:Key="ImageTemplate" x:DataType="model:GameBar">
+                <!--<StackPanel
                 x:Name="TransformeControl"
                 Width="200"
                 Height="300"
@@ -46,126 +51,203 @@
                 </TextBlock>
             </StackPanel>-->
 
-            <StackPanel
-                x:Name="TransformeControl"
-                Width="200"
-                Height="300"
-                Background="Orange">
-                <Image
+                <StackPanel
+                    x:Name="TransformeControl"
                     Width="200"
                     Height="300"
-                    Stretch="UniformToFill"
-                    Visibility="Collapsed" />
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" >
-                        <TextBlock Margin="10,0,0,0" Foreground="#fff" FontSize="24" Text="{x:Bind Title}"/>
-                        <Rectangle Height="1" Fill="#fff"/>
-                    </StackPanel>
-                    <StackPanel Grid.Row="1">
-                        <TextBlock
-                            Width="400"
-                            d:LayoutRounding="Auto"
-                            FontSize="400"
-                            FontWeight="ExtraBlack"
-                            Foreground="#55ffffff"
-                            Text="{x:Bind ShowTitle[0]}"
-                            Translation="0,-160,0"
-                            UseLayoutRounding="False" />
-                        <TextBlock
-                            Width="300"
-                            d:LayoutRounding="Auto"
-                            FontSize="300"
-                            FontWeight="ExtraBlack"
-                            Foreground="#55ffffff"
-                            RenderTransformOrigin="0.5,0"
-                            Text="{x:Bind ShowTitle[1]}"
-                            Translation="0,-600,0"
-                            UseLayoutRounding="False">
-                            <TextBlock.RenderTransform>
-                                <RotateTransform Angle="10" />
-                            </TextBlock.RenderTransform>
-                        </TextBlock>
+                    Background="{x:Bind Path=TitleColor, Mode=OneWay}">
+                    <Image
+                        Width="200"
+                        Height="300"
+                        Stretch="UniformToFill"
+                        Visibility="Collapsed" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <TextBlock
+                                Margin="10,0,0,0"
+                                FontSize="24"
+                                Foreground="#fff"
+                                Text="{x:Bind Title}" />
+                            <Rectangle Height="1" Fill="#fff" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1">
+                            <TextBlock
+                                Width="400"
+                                d:LayoutRounding="Auto"
+                                FontSize="400"
+                                FontWeight="ExtraBlack"
+                                Foreground="#55ffffff"
+                                Text="{x:Bind ShowTitle[0]}"
+                                Translation="0,-160,0"
+                                UseLayoutRounding="False" />
+                            <TextBlock
+                                Width="300"
+                                d:LayoutRounding="Auto"
+                                FontSize="300"
+                                FontWeight="ExtraBlack"
+                                Foreground="#55ffffff"
+                                RenderTransformOrigin="0.5,0"
+                                Text="{x:Bind ShowTitle[1]}"
+                                Translation="0,-600,0"
+                                UseLayoutRounding="False">
+                                <TextBlock.RenderTransform>
+                                    <RotateTransform Angle="10" />
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
 
-                    </StackPanel>
-                </Grid>
-            </StackPanel>
-        </DataTemplate>
-    </Page.Resources>
-    <Grid HorizontalAlignment="Stretch">
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="88"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="88" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="16,40,16,0">
-            <TextBlock FontSize="28" Text="主页"></TextBlock>
+        <StackPanel
+            Grid.Row="0"
+            Margin="16,40,16,0"
+            Orientation="Vertical">
+            <TextBlock
+                FontSize="28"
+                Foreground="{ThemeResource FontColor}"
+                Text="主页" />
             <!--<Rectangle Height="1.2" Fill="#000"></Rectangle>-->
         </StackPanel>
 
         <ScrollViewer Grid.Row="1">
             <Grid>
+                <Grid.Transitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="20"/>
+                    </TransitionCollection>
+                </Grid.Transitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="88"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="88"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="320" />
+                    <RowDefinition Height="88" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="88" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Vertical" Margin="16,40,16,0">
-                    <TextBlock FontSize="20" Text="最近游玩"></TextBlock>
-                    <Rectangle Height="1.2" Fill="#000"></Rectangle>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        Grid.Row="1"
+                        Margin="16,0,0,0"
+                        FontSize="25"
+                        Foreground="#fff"
+                        Opacity="0.5"
+                        Text="{x:Bind viewModel.WeekTitle, Mode=OneWay}" />
+                    <StackPanel Grid.Row="2" Orientation="Horizontal">
+                        <TextBlock
+                            Grid.Row="2"
+                            Margin="16,0,0,0"
+                            FontFamily="黑体"
+                            FontSize="50"
+                            Foreground="#fff"
+                            Text="{x:Bind viewModel.Hello, Mode=OneWay}" />
+                        <TextBlock
+                            Grid.Row="2"
+                            Margin="16,0,0,0"
+                            FontFamily="黑体"
+                            FontSize="50"
+                            Foreground="#fff"
+                            Text="{x:Bind viewModel.AcountName, Mode=OneWay}" />
+                    </StackPanel>
+                </Grid>
+                <StackPanel
+                    Grid.Row="1"
+                    Margin="16,40,16,0"
+                    Orientation="Vertical">
+                    <TextBlock
+                        FontSize="20"
+                        Foreground="{ThemeResource FontColor}"
+                        Text="最近游玩" />
+                    <Rectangle Height="1.2" Fill="{ThemeResource NotificationBarColor}" />
                 </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="12,0,0,0">
+                <StackPanel
+                    Grid.Row="2"
+                    Margin="12,0,0,0"
+                    Orientation="Horizontal">
+                    <StackPanel
+                        Width=" 450"
+                        Height="299"
+                        Margin="0,-8,16,0"
+                        Background="{x:Bind viewModel.ThemeFactory.Theme.GameBarColor}" />
                     <GridView
+                        x:Name="gridViewTransform"
                         IsItemClickEnabled="True"
                         ItemClick="GameBarItem_Click"
-                        x:Name="gridViewTransform"
                         ItemTemplate="{StaticResource ImageTemplate}"
                         ItemsSource="{x:Bind viewModel.LastPlyGames}">
+                        <GridView.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition FromHorizontalOffset="1" IsStaggeringEnabled="True"></EntranceThemeTransition>
+                            </TransitionCollection>
+                        </GridView.ItemContainerTransitions>
                         <GridView.ItemContainerStyle>
                             <Style TargetType="GridViewItem">
-                                <Setter Property="Margin" Value="5, 5, 19, 5"/>
+                                <Setter Property="Margin" Value="5,5,19,5" />
                             </Style>
                         </GridView.ItemContainerStyle>
 
-                        <!--An extra property also needs to be added to the GridView's ItemsWrapGrid.
-            The following sets the maximum # of items to show before wrapping.-->
+                        <!--
+                            An extra property also needs to be added to the GridView's ItemsWrapGrid.
+                            The following sets the maximum # of items to show before wrapping.
+                        -->
 
                         <GridView.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
-                                   MaximumRowsOrColumns="-1"
-                                   Orientation="Horizontal"/>
+                                <ItemsWrapGrid
+                                    x:Name="MaxItemsWrapGrid"
+                                    MaximumRowsOrColumns="-1"
+                                    Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </GridView.ItemsPanel>
                     </GridView>
                 </StackPanel>
-                <StackPanel Grid.Row="2" Orientation="Vertical" Margin="16,40,16,0">
-                    <TextBlock FontSize="20" Text="所有游戏"></TextBlock>
-                    <Rectangle Height="1.2" Fill="#000"></Rectangle>
+                <StackPanel
+                    Grid.Row="3"
+                    Margin="16,40,16,0"
+                    Orientation="Vertical">
+                    <TextBlock
+                        FontSize="20"
+                        Foreground="{ThemeResource FontColor}"
+                        Text="所有游戏" />
+                    <Rectangle Height="1.2" Fill="{ThemeResource NotificationBarColor}" />
                 </StackPanel>
-                <StackPanel Grid.Row="3" Margin="12,0,0,0" HorizontalAlignment="Center">
+                <StackPanel
+                    Grid.Row="4"
+                    Margin="12,0,0,0"
+                    HorizontalAlignment="Center">
                     <GridView
+                        x:Name="AllGameGridView"
                         IsItemClickEnabled="True"
                         ItemClick="GameBarItem_AllGameBar_Click"
-                        x:Name="AllGameGridView"
                         ItemTemplate="{StaticResource ImageTemplate}"
                         ItemsSource="{x:Bind viewModel.AllGames}">
                         <GridView.ItemContainerStyle>
                             <Style TargetType="GridViewItem">
-                                <Setter Property="Margin" Value="5, 5, 24, 5"/>
+                                <Setter Property="Margin" Value="5,5,24,5" />
                             </Style>
                         </GridView.ItemContainerStyle>
 
-                        <!--An extra property also needs to be added to the GridView's ItemsWrapGrid.
-            The following sets the maximum # of items to show before wrapping.-->
+                        <!--
+                            An extra property also needs to be added to the GridView's ItemsWrapGrid.
+                            The following sets the maximum # of items to show before wrapping.
+                        -->
 
                         <GridView.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
-                                   Orientation="Horizontal"/>
+                                <ItemsWrapGrid x:Name="MaxItemsWrapGrid" Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </GridView.ItemsPanel>
                     </GridView>

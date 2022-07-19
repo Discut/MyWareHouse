@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MyWareHouse.Models.Data.Theme;
+using MyWareHouse.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,14 +27,24 @@ namespace MyWareHouse.Views
     /// </summary>
     public sealed partial class SettingFrame : Page
     {
+        private SettingFrameViewModel ViewModel;
         public SettingFrame()
         {
             this.InitializeComponent();
+            ViewModel = new SettingFrameViewModel();
+            this.DataContext = ViewModel;
         }
 
         private async void Page_Loading(FrameworkElement sender, object args)
         {
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+           (this.DataContext as SettingFrameViewModel).Theme.Theme = new LightTheme();
+            (this.DataContext as SettingFrameViewModel).Text = "asdas";
         }
     }
 }

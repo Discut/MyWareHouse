@@ -1,12 +1,17 @@
 ﻿using MyWareHouse.Models.Data;
 using MyWareHouse.Models.FavoriteService;
+using MyWareHouse.Models.ThemeService;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
+using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -20,11 +25,13 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MyWareHouse.Views
 {
+
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
     public sealed partial class IndexFrame : Page
     {
+
         bool isGameItemMenuOpen = false;
         /// <summary>
         /// 右键菜单栏选中的目标
@@ -48,6 +55,10 @@ namespace MyWareHouse.Views
 
             this.init();
         }
+
+
+        
+
 
         private bool init()
         {
@@ -184,5 +195,6 @@ namespace MyWareHouse.Views
         {
             indexFrameViewModel.MoveOutFavorite(target);
         }
+
     }
 }

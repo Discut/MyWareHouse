@@ -9,23 +9,18 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:viewModels="using:MyWareHouse.ViewModels"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    Loading="{x:Bind indexFrameViewModel.Page_Loading}">
+    Loading="{x:Bind indexFrameViewModel.Page_Loading}"
+    RequestedTheme="Light">
 
-    <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="/Assets/background_1.jpg" Stretch="Fill" />
-        </Grid.Background>
+    <Page.Resources>
+        <ResourceDictionary Source="/Assets/Theme/DefaultTheme.xaml" />
+    </Page.Resources>
+    <Grid Background="{x:Bind indexFrameViewModel.ThemeFactory.Theme.Background, Mode=OneWay}">
         <Grid.Resources>
             <CommandBarFlyout x:Name="GameBarContextMenu" Closing="GameBarContextMenu_Closing">
                 <CommandBarFlyout.SecondaryCommands>
                     <AppBarButton Click="ReName" Label="重命名" />
-                    <AppBarButton Label="移动到" Tag="MoveTo">
-                        <!--<AppBarButton.Flyout>
-                            <MenuFlyout>
-                                <MenuFlyoutItem Text="da" />
-                            </MenuFlyout>
-                        </AppBarButton.Flyout>-->
-                    </AppBarButton>
+                    <AppBarButton Label="移动到" Tag="MoveTo" />
                     <AppBarButton Click="MoveOutFavorite" Label="移出收藏夹" />
                     <AppBarButton Click="DeleteGame" Label="删除此游戏" />
                 </CommandBarFlyout.SecondaryCommands>
@@ -50,20 +45,19 @@
         <muxc:NavigationView
             x:Name="navview"
             FooterMenuItemsSource="{x:Bind indexFrameViewModel.FooterMenu, Mode=OneWay}"
+            IsBackButtonVisible="Auto"
             IsTitleBarAutoPaddingEnabled="False"
             ItemInvoked="{x:Bind indexFrameViewModel.OnItemInvoked}"
             Loaded="leftBar_Loaded"
             MenuItemTemplate="{StaticResource IndexLeftMenuItem}"
             MenuItemsSource="{x:Bind indexFrameViewModel.Categories, Mode=OneWay}"
             PaneDisplayMode="Auto"
+            PaneTitle="sda"
             SelectionChanged="{x:Bind indexFrameViewModel.leftBar_SelectionChanged}">
             <Frame
                 x:Name="ContentFrame"
                 Margin="-1,0,0,0"
                 HorizontalAlignment="Stretch">
-                <Frame.Background>
-                    <SolidColorBrush Opacity="0" Color="Orange" />
-                </Frame.Background>
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition />

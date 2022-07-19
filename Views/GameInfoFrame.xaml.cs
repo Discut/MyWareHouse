@@ -20,6 +20,7 @@ using Windows.Storage;
 using MyWareHouse.Models.Data;
 using MyWareHouse.Models.FileService;
 using MyWareHouse.Models.GameService;
+using MyWareHouse.ViewModels;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -36,9 +37,15 @@ namespace MyWareHouse.Views
 
         private Game game;
 
+        private GameInfoFrameViewModel _viewModel;
+
+        public GameInfoFrameViewModel ViewModel { get=>_viewModel; set=>_viewModel=value; }
+
         public GameInfoFrame()
         {
             this.InitializeComponent();
+            // 开放数据源
+            this.ViewModel = new GameInfoFrameViewModel();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

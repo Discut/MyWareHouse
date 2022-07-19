@@ -35,7 +35,15 @@ namespace MyWareHouse.Views
         {
             this.InitializeComponent();
             this.mainPageViewModel = new ViewModels.MainPageViewModel();
-            this.DataContext = this.mainPageViewModel;   
+            this.DataContext = this.mainPageViewModel;
+
+            //Hide default title bar.
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+
+            var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
         }
 
         private async Task init()

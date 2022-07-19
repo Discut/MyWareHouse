@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,6 +27,8 @@ namespace MyWareHouse.Views
     /// </summary>
     public sealed partial class WarehouseIndexFrame : Page
     {
+        
+
         private WarehouseIndexFrameViewModel viewModel;
 
         private Models.Data.GameBar _gameBar;
@@ -85,7 +88,7 @@ namespace MyWareHouse.Views
          */
         private void GotoGameInfoFrame(object control, GridView gridView)
         {
-            
+
             if (control != null)
             {
                 // Prepare the connected animation.
@@ -97,6 +100,48 @@ namespace MyWareHouse.Views
             // Navigate to the DetailedInfoPage.
             // Note that we suppress the default animation. 
             Frame.Navigate(typeof(Views.GameInfoFrame), control, new DrillInNavigationTransitionInfo());
+        }
+
+        private async void Page_Loading(FrameworkElement sender, object args)
+        {
+
+            var users = await Windows.System.User.FindAllAsync();
+            if (users.Count > 0)
+            {
+                var user1s = await User.FindAllAsync(UserType.LocalUser);
+                var user = (string)await users.FirstOrDefault().GetPropertyAsync(KnownUserProperties.AccountName);
+                var last = (string)await users.FirstOrDefault().GetPropertyAsync(KnownUserProperties.LastName);
+                var first = (string)await users.FirstOrDefault().GetPropertyAsync(KnownUserProperties.FirstName);
+                string displayName = (string)await users.FirstOrDefault().GetPropertyAsync("Gamertag");
+
+                var domain = "";
+                var host = "";
+
+                if (string.IsNullOrEmpty(user))
+                {
+                    var domainWithUser = (string)await users.FirstOrDefault().GetPropertyAsync(KnownUserProperties.DomainName);
+                    domain = domainWithUser.Split('\\')[0];
+                    user = domainWithUser.Split('\\')[1];
+                }
+                viewModel.AcountName = first + last;
+
+                DateTime now = DateTime.Now;
+                 
+                int hour = now.Hour;
+
+                if (hour > 6 && hour <= 8)
+                    viewModel.Hello = "早上好";
+                else if (hour > 8 && hour < 10)
+                    viewModel.Hello = "上午好";
+                else if (hour >= 11 && hour <= 13)
+                    viewModel.Hello = "中午好";
+                else if (hour > 13 && hour < 18)
+                    viewModel.Hello = "下午好";
+                else
+                    viewModel.Hello = "晚上好";
+                viewModel.WeekTitle = now.DayOfWeek.ToString();
+
+            }
         }
     }
 }
