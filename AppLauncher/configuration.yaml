@@ -1,0 +1,6 @@
+﻿setting:
+ name: "sdasa"
+modules:
+ OpenFolder:
+  name: "OpenFolder.dll"
+  command: "OpenFolder"
