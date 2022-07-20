@@ -12,10 +12,7 @@
     Loading="Page_Loading"
     mc:Ignorable="d">
     <Page.Resources>
-        <CommandBarFlyout
-            x:Name="selectMenu"
-            Opened="selectMenu_Opened"
-            Opening="selectMenu_Opening">
+        <CommandBarFlyout x:Name="selectMenu">
             <CommandBarFlyout.SecondaryCommands>
                 <AppBarButton
                     Click="SetHeadImageAsync"

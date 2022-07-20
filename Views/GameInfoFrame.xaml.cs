@@ -22,6 +22,7 @@ using MyWareHouse.Models.FileService;
 using MyWareHouse.Models.GameService;
 using MyWareHouse.ViewModels;
 using Windows.UI;
+using Windows.System;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -219,26 +220,7 @@ namespace MyWareHouse.Views
 
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            //1.创建和自定义 FileOpenPicker
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
-
-            picker.FileTypeFilter.Add(".exe");
-
-
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
-            {
-                // Application now has read/write access to the picked file
-                string name = file.Name;
-                string appPath = file.Path.Replace("\\","/");
-
-            }
-            else
-            {
-                //this.textBlock.Text = "Operation cancelled.";
-            }
+            GameStartByLauncher.Instance.OpenGameFolder(game);
         }
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -355,25 +337,5 @@ namespace MyWareHouse.Views
             Update();
         }
 
-
-
-        private void selectMenu_Opening(object sender, object e)
-        {
-
-            IObservableVector<ICommandBarElement> secondaryCommands = (sender as CommandBarFlyout).SecondaryCommands;
-            //foreach(ICommandBarElement commandBarElement in secondaryCommands)
-            //{
-
-            //}
-            
-
-
-        }
-
-        private void selectMenu_Opened(object sender, object e)
-        {
-
-             
-        }
     }
 }
