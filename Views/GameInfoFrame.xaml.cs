@@ -21,6 +21,7 @@ using MyWareHouse.Models.Data;
 using MyWareHouse.Models.FileService;
 using MyWareHouse.Models.GameService;
 using MyWareHouse.ViewModels;
+using Windows.UI;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -72,6 +73,9 @@ namespace MyWareHouse.Views
                 this.Title = gameBar.Title;
                 this.appPath = gameBar.Game.ApplicationPath;
                 game = gameBar.Game;
+
+                ViewModel.Game = gameBar.Game;
+                ViewModel.TitleChar = gameBar.ShowTitle;
             }
 
             var anim = ConnectedAnimationService.GetForCurrentView().GetAnimation("ForwardConnectedAnimation");
@@ -307,12 +311,33 @@ namespace MyWareHouse.Views
         {
             // 获取头图
             Windows.UI.Xaml.Media.Imaging.BitmapImage headImage = ImageFileService.Instance().TryGetImage(game.Id);
+            if (headImage == null)
+                ViewModel.HeadImageStatu = Visibility.Collapsed;
+            else
+                ViewModel.HeadImageStatu = Visibility.Visible;
             HeadImage.Source = headImage;
             // 获取背景图
             Windows.UI.Xaml.Media.Imaging.BitmapImage bgiImage = ImageFileService.Instance().TryGetImage(game.Id + "_bgi");
-            ImageBrush brush = new ImageBrush();
-            brush.ImageSource = bgiImage;
-            BackgroundBrush.ImageSource = bgiImage;
+            if (bgiImage == null)
+            {
+                Microsoft.UI.Xaml.Media.AcrylicBrush brush = new Microsoft.UI.Xaml.Media.AcrylicBrush();
+                brush.TintLuminosityOpacity = 0.2;
+                brush.TintOpacity = 0.1;
+                BackgroundLayout.Background = brush;
+                //ViewModel.HeadImageStatu = Visibility.Collapsed;
+
+                ViewModel.GameInfoBoxBackgroundOpacity = 0;
+            }
+            else
+            {
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = bgiImage;
+                brush.Stretch = Stretch.UniformToFill;
+                BackgroundLayout.Background = brush;
+
+                ViewModel.HeadImageStatu = Visibility.Visible;
+            }
+             
 
         }
 
@@ -342,7 +367,7 @@ namespace MyWareHouse.Views
         {
             get
             {
-                if (BackgroundBrush.ImageSource == null)
+                if (ImageFileService.Instance().TryGetImage(game.Id + "_bgi") != null)
                     return Visibility.Visible;
                 else
                     return Visibility.Collapsed;

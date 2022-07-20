@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:MyWareHouse.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
@@ -17,132 +18,20 @@
             Grid.Row="0"
             Margin="16,40,16,0"
             Orientation="Vertical">
-            <TextBlock FontSize="28" Text="设置" />
+            <TextBlock Foreground="{x:Bind ViewModel.Theme.Theme.FontColor}" FontSize="28" Text="设置" />
             <!--<Rectangle Height="1.2" Fill="#000"></Rectangle>-->
         </StackPanel>
-        <StackPanel Grid.Row="1" Background="{x:Bind ViewModel.Theme.Theme.Background, Mode=OneWay}">
-            <Button Click="Button_Click" Content="{x:Bind ViewModel.Text, Mode=TwoWay}" />
-            <TextBlock
-                FontSize="40"
-                Foreground="{x:Bind ViewModel.Theme.Theme.FontColor, Mode=TwoWay}"
-                Text="{x:Bind ViewModel.Text, Mode=TwoWay}" />
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Grid
-                    Width="200"
-                    Height="300"
-                    Background="Orange"
-                    Translation="0,0,24">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="255" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.Shadow>
-                        <ThemeShadow />
-                    </Grid.Shadow>
-
-                    <StackPanel Grid.Row="0" Height="255">
-                        <TextBlock
-                            Width="400"
-                            d:LayoutRounding="Auto"
-                            FontSize="400"
-                            FontWeight="ExtraBlack"
-                            Foreground="#55ffffff"
-                            Text="A"
-                            Translation="0,-130,0"
-                            UseLayoutRounding="False" />
-                        <TextBlock
-                            Width="300"
-                            d:LayoutRounding="Auto"
-                            FontSize="300"
-                            FontWeight="ExtraBlack"
-                            Foreground="#55ffffff"
-                            RenderTransformOrigin="0.5,0"
-                            Text="A"
-                            Translation="0,-575,0"
-                            UseLayoutRounding="False">
-                            <TextBlock.RenderTransform>
-                                <RotateTransform Angle="10" />
-                            </TextBlock.RenderTransform>
-                        </TextBlock>
-                    </StackPanel>
-                    <StackPanel
-                        Grid.Row="1"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Background="#44ffffff"
-                        Orientation="Vertical">
-                        <TextBlock
-                            Margin="10,6,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            FontSize="24"
-                            Foreground="#000000"
-                            Text="游戏名称" />
-                    </StackPanel>
-
-                </Grid>
-                <Image
-                    Width="200"
-                    Height="300"
-                    Loading="Page_Loading"
-                    Source="/Assets/background_1.jpg"
-                    Stretch="UniformToFill"
-                    Visibility="Visible" />
+        <Grid Grid.Row="1" Margin="20,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="400"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0">
+                <TextBlock Foreground="{x:Bind ViewModel.Theme.Theme.FontColor}" Text="主题" FontSize="24" />
             </StackPanel>
+            <StackPanel Grid.Row="1">
 
-            <StackPanel
-                x:Name="TransformeControl"
-                Width="200"
-                Height="300"
-                Margin="0,100,0,0"
-                Background="Orange">
-                <Image
-                    Width="200"
-                    Height="300"
-                    Source="/Assets/background_1.jpg"
-                    Stretch="UniformToFill"
-                    Visibility="Visible" />
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0">
-                        <TextBlock
-                            Margin="10,0,0,0"
-                            FontSize="24"
-                            Foreground="#fff"
-                            Text="游戏名称" />
-                        <Rectangle Height="1" Fill="#fff" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="1">
-                        <TextBlock
-                            Width="400"
-                            d:LayoutRounding="Auto"
-                            FontSize="400"
-                            FontWeight="ExtraBlack"
-                            Foreground="#55ffffff"
-                            Text="A"
-                            Translation="0,-160,0"
-                            UseLayoutRounding="False" />
-                        <TextBlock
-                            Width="300"
-                            d:LayoutRounding="Auto"
-                            FontSize="300"
-                            FontWeight="ExtraBlack"
-                            Foreground="#55ffffff"
-                            RenderTransformOrigin="0.5,0"
-                            Text="G"
-                            Translation="0,-600,0"
-                            UseLayoutRounding="False">
-                            <TextBlock.RenderTransform>
-                                <RotateTransform Angle="10" />
-                            </TextBlock.RenderTransform>
-                        </TextBlock>
-
-                    </StackPanel>
-                </Grid>
             </StackPanel>
-        </StackPanel>
+        </Grid>
     </Grid>
 </Page>

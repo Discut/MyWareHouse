@@ -7,7 +7,8 @@
     xmlns:local="using:MyWareHouse.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    Background="Transparent"
+    xmlns:muxm="using:Microsoft.UI.Xaml.Media"
+    Background="#196a71"
     Loading="Page_Loading"
     mc:Ignorable="d">
     <Page.Resources>
@@ -33,30 +34,23 @@
                 <AppBarButton Icon="Setting" Label="属性设置" />
             </CommandBarFlyout.SecondaryCommands>
         </CommandBarFlyout>
-        <muxc:MenuBar x:Name="MenuBarText">
-            <muxc:MenuBarItem Title="File">
-                <MenuFlyoutSubItem Text="New">
-                    <MenuFlyoutItem Text="Plain Text Document" />
-                    <MenuFlyoutItem Text="Rich Text Document" />
-                    <MenuFlyoutItem Text="Other Formats..." />
-                </MenuFlyoutSubItem>
-                <MenuFlyoutItem Text="Open..." />
-                <MenuFlyoutItem Text="Save" />
-                <MenuFlyoutSeparator />
-                <MenuFlyoutItem Text="Exit" />
-            </muxc:MenuBarItem>
-        </muxc:MenuBar>
     </Page.Resources>
 
-    <Grid RightTapped="Grid_RightTapped">
-        <Grid.Background>
+    <Grid x:Name="BackgroundLayout" RightTapped="Grid_RightTapped">
+        <!--<Grid.Background>
             <ImageBrush x:Name="BackgroundBrush" />
-        </Grid.Background>
+            <muxm:AcrylicBrush
+                TintLuminosityOpacity="0.2"
+                TintOpacity="0.1" />
+        </Grid.Background>-->
         <!--<Image Source="/Assets/background_1.jpg" Height="1080" Width="1920"/>-->
-        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+        <StackPanel
+            x:Name="GameInfoBox"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom">
             <StackPanel.Background>
-                <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
-                    <GradientStop Offset="1" Color="{x:Bind ViewModel.ThemeFactory.Theme.ColorTheme, Mode=OneWay}" />
+                <LinearGradientBrush Opacity="{x:Bind ViewModel.GameInfoBoxBackgroundOpacity, Mode=OneWay}" StartPoint="1,0" EndPoint="1,1">
+                    <GradientStop Offset="1" Color="#fff" />
                     <GradientStop Offset="0" Color="#00ffffff" />
                 </LinearGradientBrush>
             </StackPanel.Background>
@@ -73,17 +67,49 @@
                         Width="250"
                         Height="380"
                         HorizontalAlignment="Left"
-                        Background="Orange"
-                        CornerRadius="8">
+                        Background="#196a71"
+                        CornerRadius="3">
                         <StackPanel.BackgroundTransition>
                             <BrushTransition />
                         </StackPanel.BackgroundTransition>
+                        <StackPanel
+                            Width="250"
+                            Height="380"
+                            VerticalAlignment="Stretch">
+                            <TextBlock
+                                Width="450"
+                                Margin="-80,0,0,0"
+                                d:LayoutRounding="Auto"
+                                FontSize="450"
+                                FontWeight="ExtraBlack"
+                                Foreground="#55ffffff"
+                                Text="{x:Bind ViewModel.TitleChar[0], Mode=OneWay}"
+                                Translation="50,-200,0"
+                                UseLayoutRounding="False">
+                                <TextBlock.RenderTransform>
+                                    <RotateTransform Angle="10" />
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            <TextBlock
+                                Width="300"
+                                d:LayoutRounding="Auto"
+                                FontSize="300"
+                                FontWeight="ExtraBlack"
+                                Foreground="#55ffffff"
+                                RenderTransformOrigin="0.5,0"
+                                Text="{x:Bind ViewModel.TitleChar[1], Mode=OneWay}"
+                                Translation="0,-530,0"
+                                UseLayoutRounding="False" />
+                        </StackPanel>
                         <Image
                             x:Name="HeadImage"
                             Width="250"
                             Height="380"
-                            Stretch="UniformToFill" />
+                            Margin="0,-380,0,0"
+                            Stretch="UniformToFill"
+                            Visibility="{x:Bind ViewModel.HeadImageStatu, Mode=OneWay}" />
                     </StackPanel>
+
                     <StackPanel
                         Grid.Column="2"
                         VerticalAlignment="Top"
@@ -98,7 +124,7 @@
                             <TextBlock
                                 Grid.Row="0"
                                 FontSize="52"
-                                Text="{x:Bind Title, Mode=OneTime}" />
+                                Text="{x:Bind Title, Mode=OneWay}" />
                             <TextBlock Grid.Row="1" Text="• 2022-2-21" />
                             <StackPanel
                                 Grid.Row="2"

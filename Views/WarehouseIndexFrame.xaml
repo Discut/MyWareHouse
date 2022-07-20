@@ -7,6 +7,7 @@
     xmlns:local="using:MyWareHouse.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="using:MyWareHouse.Models.Data"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:viewModels="using:MyWareHouse.ViewModels"
     Background="#00000000"
@@ -53,7 +54,7 @@
 
                 <StackPanel
                     x:Name="TransformeControl"
-                    Width="200"
+                    Width="220"
                     Height="300"
                     Background="{x:Bind Path=TitleColor, Mode=OneWay}">
                     <Image
@@ -227,16 +228,18 @@
                 <StackPanel
                     Grid.Row="4"
                     Margin="12,0,0,0"
-                    HorizontalAlignment="Center">
-                    <GridView
+                    >
+                    <controls:AdaptiveGridView
                         x:Name="AllGameGridView"
                         IsItemClickEnabled="True"
                         ItemClick="GameBarItem_AllGameBar_Click"
+                        ItemHeight="300"
+                        DesiredWidth="220"
                         ItemTemplate="{StaticResource ImageTemplate}"
                         ItemsSource="{x:Bind viewModel.AllGames}">
                         <GridView.ItemContainerStyle>
                             <Style TargetType="GridViewItem">
-                                <Setter Property="Margin" Value="5,5,24,5" />
+                                <Setter Property="Margin" Value="12,5,12,5" />
                             </Style>
                         </GridView.ItemContainerStyle>
 
@@ -250,7 +253,7 @@
                                 <ItemsWrapGrid x:Name="MaxItemsWrapGrid" Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </GridView.ItemsPanel>
-                    </GridView>
+                    </controls:AdaptiveGridView>
                 </StackPanel>
             </Grid>
         </ScrollViewer>
