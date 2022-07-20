@@ -47,6 +47,11 @@ namespace MyWareHouse.Views
             this.InitializeComponent();
             // 开放数据源
             this.ViewModel = new GameInfoFrameViewModel();
+
+            ViewModel.requestUpdate = () =>
+            {
+                Update();
+            };
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -64,6 +69,10 @@ namespace MyWareHouse.Views
             }
         }
 
+        /// <summary>
+        /// 页面转跳过来时调用
+        /// </summary>
+        /// <param name="e">转跳事件</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -324,7 +333,7 @@ namespace MyWareHouse.Views
                 brush.TintLuminosityOpacity = 0.2;
                 brush.TintOpacity = 0.1;
                 BackgroundLayout.Background = brush;
-                //ViewModel.HeadImageStatu = Visibility.Collapsed;
+                ViewModel.BGIStatu = Visibility.Collapsed;
 
                 ViewModel.GameInfoBoxBackgroundOpacity = 0;
             }
@@ -334,8 +343,8 @@ namespace MyWareHouse.Views
                 brush.ImageSource = bgiImage;
                 brush.Stretch = Stretch.UniformToFill;
                 BackgroundLayout.Background = brush;
-
-                ViewModel.HeadImageStatu = Visibility.Visible;
+                ViewModel.GameInfoBoxBackgroundOpacity = 1;
+                ViewModel.BGIStatu = Visibility.Visible;
             }
              
 
@@ -346,39 +355,25 @@ namespace MyWareHouse.Views
             Update();
         }
 
-        public Visibility IsShowSetHeadImage
+
+
+        private void selectMenu_Opening(object sender, object e)
         {
-            get
-            {
-                if (HeadImage.Source == null)
-                    return Visibility.Visible;
-                else
-                    return Visibility.Collapsed;
-            }
+
+            IObservableVector<ICommandBarElement> secondaryCommands = (sender as CommandBarFlyout).SecondaryCommands;
+            //foreach(ICommandBarElement commandBarElement in secondaryCommands)
+            //{
+
+            //}
+            
+
+
         }
-        public Visibility IsShowClearHeadImage
+
+        private void selectMenu_Opened(object sender, object e)
         {
-            get
-            {
-                return IsShowSetHeadImage == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
-        public Visibility IsShowSetBackgroundImage
-        {
-            get
-            {
-                if (ImageFileService.Instance().TryGetImage(game.Id + "_bgi") != null)
-                    return Visibility.Visible;
-                else
-                    return Visibility.Collapsed;
-            }
-        }
-        public Visibility IsShowClearBackgroundImage
-        {
-            get
-            {
-                return IsShowSetBackgroundImage == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-            }
+
+             
         }
     }
 }

@@ -12,6 +12,8 @@ namespace MyWareHouse.ViewModels
 {
     public class GameInfoFrameViewModel : BindableBase
     {
+        internal Action requestUpdate;
+
         private ThemeFactory _theme;
         /// <summary>
         /// 主题工厂
@@ -48,14 +50,22 @@ namespace MyWareHouse.ViewModels
         public Visibility HeadImageStatu
         {
             get => _headImageStatu;
-            set => SetProperty(ref _headImageStatu, value);
+            set 
+            {
+                SetProperty(ref _headImageStatu, value);
+                RaisePropertyChanged("IsShowSetHeadImage");
+            }
         }
 
         private Visibility _bgiStatu = Visibility.Collapsed;
         public Visibility BGIStatu
         {
             get => _bgiStatu;
-            set => SetProperty(ref _bgiStatu, value);
+            set 
+            {
+                SetProperty(ref _bgiStatu, value);
+                RaisePropertyChanged("IsShowSetBackgroundImage");
+            }
         }
 
         private double _gameInfoBoxBackgroundOpacity = 1;
@@ -64,5 +74,32 @@ namespace MyWareHouse.ViewModels
             get => _gameInfoBoxBackgroundOpacity;
             set => SetProperty(ref _gameInfoBoxBackgroundOpacity, value);
         }
+
+
+        public Visibility IsShowSetHeadImage
+        {
+            get
+            {
+                if (HeadImageStatu == Visibility.Visible)
+                    return Visibility.Collapsed;
+                else
+                    return Visibility.Visible;
+            }
+        }
+        public Visibility IsShowSetBackgroundImage
+        {
+            get
+            {
+                if (BGIStatu == Visibility.Visible)
+                    return Visibility.Collapsed;
+                else
+                    return Visibility.Visible;
+            }
+        }
+        internal void selectMenu_Opening(object sender, object e)
+        {
+
+        }
+
     }
 }

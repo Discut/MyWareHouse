@@ -12,24 +12,27 @@
     Loading="Page_Loading"
     mc:Ignorable="d">
     <Page.Resources>
-        <CommandBarFlyout x:Name="selectMenu">
+        <CommandBarFlyout
+            x:Name="selectMenu"
+            Opened="selectMenu_Opened"
+            Opening="selectMenu_Opening">
             <CommandBarFlyout.SecondaryCommands>
                 <AppBarButton
                     Click="SetHeadImageAsync"
                     Label="设置头图"
-                    Visibility="{x:Bind IsShowSetHeadImage}" />
+                    Visibility="{x:Bind ViewModel.IsShowSetHeadImage, Mode=OneWay}" />
                 <AppBarButton
                     Click="ClearHeadImageAsync"
                     Label="清理头图"
-                    Visibility="{x:Bind IsShowClearHeadImage}" />
+                    Visibility="{x:Bind ViewModel.HeadImageStatu, Mode=OneWay}" />
                 <AppBarButton
                     Click="SetBackgroudImageAsync"
                     Label="设置背景"
-                    Visibility="{x:Bind IsShowSetBackgroundImage}" />
+                    Visibility="{x:Bind ViewModel.IsShowSetBackgroundImage, Mode=OneWay}" />
                 <AppBarButton
                     Click="ClearBackgroudImageAsync"
                     Label="清理背景"
-                    Visibility="{x:Bind IsShowClearBackgroundImage}" />
+                    Visibility="{x:Bind ViewModel.BGIStatu, Mode=OneWay}" />
                 <AppBarSeparator />
                 <AppBarButton Icon="Setting" Label="属性设置" />
             </CommandBarFlyout.SecondaryCommands>
