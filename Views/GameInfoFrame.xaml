@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:muxm="using:Microsoft.UI.Xaml.Media"
-    Background="#196a71"
+    Background="{x:Bind ViewModel.ThemeFactory.Theme.ThemeColor, Mode=OneWay}"
     Loading="Page_Loading"
     mc:Ignorable="d">
     <Page.Resources>
@@ -37,13 +37,6 @@
     </Page.Resources>
 
     <Grid x:Name="BackgroundLayout" RightTapped="Grid_RightTapped">
-        <!--<Grid.Background>
-            <ImageBrush x:Name="BackgroundBrush" />
-            <muxm:AcrylicBrush
-                TintLuminosityOpacity="0.2"
-                TintOpacity="0.1" />
-        </Grid.Background>-->
-        <!--<Image Source="/Assets/background_1.jpg" Height="1080" Width="1920"/>-->
         <StackPanel
             x:Name="GameInfoBox"
             HorizontalAlignment="Stretch"
@@ -67,7 +60,7 @@
                         Width="250"
                         Height="380"
                         HorizontalAlignment="Left"
-                        Background="#196a71"
+                        Background="{x:Bind ViewModel.ThemeFactory.Theme.GameBarColor, Mode=OneWay}"
                         CornerRadius="3">
                         <StackPanel.BackgroundTransition>
                             <BrushTransition />
@@ -124,6 +117,7 @@
                             <TextBlock
                                 Grid.Row="0"
                                 FontSize="52"
+                                Foreground="{x:Bind Path=ViewModel.ThemeFactory.Theme.FontColor, Mode=OneWay}"
                                 Text="{x:Bind Title, Mode=OneWay}" />
                             <TextBlock Grid.Row="1" Text="• 2022-2-21" />
                             <StackPanel

@@ -58,10 +58,4 @@ namespace MyWareHouse.Views
             this.IndexFrame.Navigate(typeof(Views.IndexFrame), null, new DrillInNavigationTransitionInfo());
         }
     }
-    [Serializable]
-    class LastPlay
-    {
-        internal string id;
-        internal DateTime date;
-    }
 }

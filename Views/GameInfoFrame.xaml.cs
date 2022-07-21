@@ -311,10 +311,11 @@ namespace MyWareHouse.Views
             Windows.UI.Xaml.Media.Imaging.BitmapImage bgiImage = ImageFileService.Instance().TryGetImage(game.Id + "_bgi");
             if (bgiImage == null)
             {
-                Microsoft.UI.Xaml.Media.AcrylicBrush brush = new Microsoft.UI.Xaml.Media.AcrylicBrush();
-                brush.TintLuminosityOpacity = 0.2;
-                brush.TintOpacity = 0.1;
-                BackgroundLayout.Background = brush;
+                // 无图片的亚力克板
+                //Microsoft.UI.Xaml.Media.AcrylicBrush brush = new Microsoft.UI.Xaml.Media.AcrylicBrush();
+                //brush.TintLuminosityOpacity = 0.2;
+                //brush.TintOpacity = 0.1;
+                //BackgroundLayout.Background = brush;
                 ViewModel.BGIStatu = Visibility.Collapsed;
 
                 ViewModel.GameInfoBoxBackgroundOpacity = 0;

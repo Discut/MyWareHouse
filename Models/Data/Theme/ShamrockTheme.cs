@@ -14,16 +14,14 @@ namespace MyWareHouse.Models.Data.Theme
 
         public ShamrockTheme()
         {
-            SolidColorBrush solid = new SolidColorBrush();
-            solid.Color = Color.FromArgb(255, 255, 255, 255);
-            this.FontColor = solid;
+            FontColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            ThemeColor = new SolidColorBrush(Color.FromArgb(255, 76, 128, 69));
+            ColorTheme = Color.FromArgb(255, 76, 128, 69);
 
-            SolidColorBrush solid1 = new SolidColorBrush();
-            solid1.Color = Color.FromArgb(255, 76, 128, 69);
-            this.ThemeColor = solid1;
+            GameBarColor = new SolidColorBrush(Color.FromArgb(255, 68, 117, 61));
 
             ImageBrush imageBrush = new ImageBrush();
-            imageBrush.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/Background/1.jpeg"));
+            imageBrush.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/Background/2.jpg"));
             imageBrush.Stretch = Stretch.UniformToFill;
             this.Background = imageBrush;
         }

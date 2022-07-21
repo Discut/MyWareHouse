@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Toolkit.Uwp;
+using MyWareHouse.Models.ThemeService;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -47,5 +48,12 @@ namespace MyWareHouse.Views
            (this.DataContext as SettingFrameViewModel).Theme.Theme = new LightTheme();
             (this.DataContext as SettingFrameViewModel).Text = "asdas";
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            ThemeFactory.Instance.Theme = new AnimeSkyTheme();
+        }
+
+        
     }
 }

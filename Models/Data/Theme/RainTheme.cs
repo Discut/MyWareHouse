@@ -13,11 +13,11 @@ namespace MyWareHouse.Models.Data.Theme
     {
         public RainTheme()
         {
-            this.FontColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-            this.ColorTheme = Color.FromArgb(255, 25, 106, 113);
-            this.ThemeColor = new SolidColorBrush(ColorTheme);
-
-            this.GameBarColor = this.ThemeColor;
+            FontColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+            ColorTheme = Color.FromArgb(255, 41, 60, 71);
+            ThemeColor = new SolidColorBrush(Color.FromArgb(255, 41, 60, 71));
+            
+            this.GameBarColor = new SolidColorBrush(Color.FromArgb(255, 25, 106, 113));
 
             ImageBrush imageBrush = new ImageBrush();
             imageBrush.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/Background/3.jpg"));

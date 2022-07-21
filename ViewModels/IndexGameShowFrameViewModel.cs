@@ -14,7 +14,7 @@ namespace MyWareHouse.ViewModels
 {
     class IndexGameShowFrameViewModel : BindableBase
     {
-        private ThemeFactory _theme;
+        private ThemeFactory _theme = ThemeFactory.Instance;
         /// <summary>
         /// 主题工厂
         /// </summary>
@@ -29,51 +29,27 @@ namespace MyWareHouse.ViewModels
         public string Title { get; set; }
 
 
-        public System.Collections.ObjectModel.ObservableCollection<GameBar> gameBarItem;
+        private System.Collections.ObjectModel.ObservableCollection<GameBar> _gameBarItem = new System.Collections.ObjectModel.ObservableCollection<GameBar>();
 
-        Double w = 300;
+        public System.Collections.ObjectModel.ObservableCollection<GameBar> GameBarItem
+        {
+            get => _gameBarItem;
+            set => SetProperty(ref _gameBarItem, value);
+        }
 
         public IndexGameShowFrameViewModel()
         {
-            this.gameBarItem = new System.Collections.ObjectModel.ObservableCollection<GameBar>();
-            //this.gameBarItem.Add(new GameBarItem() { Title = "游戏", Width = w ,Favorite="未设置收藏夹"});
-            //this.gameBarItem.Add(new GameBarItem() { Title = "游戏游戏", Width = w,Favorite = "置收藏夹" });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "LBS", Width = w,Favorite = "收藏夹" });
-
-            //this.gameBarItem.Add(new GameBarItem() { Title = "DSFS", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "2", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "1", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "2", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "1", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "2", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "1", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "2", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "1", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "2", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "1", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "2", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "1", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "2", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "1", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "2", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "1", Width = w });
-            //this.gameBarItem.Add(new GameBarItem() { Title = "2", Width = w });
-
         }
 
         internal void init(GameBar target)
         {
             foreach (GameBar game in target.Children)
-                gameBarItem.Add(game);
+            {
+                game.TitleColor = ThemeFactory.Theme.GameBarColor;
+                GameBarItem.Add(game);
+            }
         }
 
         
     }
-
-    //public class GameBarItem
-    //{
-    //    public string Title;
-    //    public string Favorite;
-    //    public Double Width;
-    //}
 }

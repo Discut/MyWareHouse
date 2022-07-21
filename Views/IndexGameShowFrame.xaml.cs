@@ -1,4 +1,5 @@
 ﻿using MyWareHouse.Models.Data;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,40 +30,28 @@ namespace MyWareHouse.Views
     {
         private Models.Data.GameBar _gameBar;
 
-        public double _width = 400;
+        private ViewModels.IndexGameShowFrameViewModel indexGameShowFrameViewModel = new ViewModels.IndexGameShowFrameViewModel();
 
-        public Thickness thickness = new Thickness(20,20,20,20);
-
-        private ViewModels.IndexGameShowFrameViewModel indexGameShowFrameViewModel;
+        internal ViewModels.IndexGameShowFrameViewModel ViewModel
+        {
+            get => indexGameShowFrameViewModel;
+            set => indexGameShowFrameViewModel = value;
+        }
         public IndexGameShowFrame()
         {
             this.InitializeComponent();
 
-            this.indexGameShowFrameViewModel = new ViewModels.IndexGameShowFrameViewModel();
-
-            this.DataContext = indexGameShowFrameViewModel;
+            
 
         }
-        public void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //this.GameGridView.ItemContainerStyle.
-            //this.style.SetValue(this.setter.Property, new Thickness(0,0,0,0));
-
-            //this.thickness = new Thickness(0,0,0,0);
-            Size newSize = e.NewSize;
-
-            this._width = newSize.Width - (300 * 2);
-
-        }
-
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             GameBar gameBar = e.Parameter as GameBar;
             if (gameBar != null)
             {
-                indexGameShowFrameViewModel.Title = gameBar.Title;
-                indexGameShowFrameViewModel.init(gameBar);
+                ViewModel.Title = gameBar.Title;
+                ViewModel.init(gameBar);
 
             }
 

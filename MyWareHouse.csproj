@@ -143,6 +143,8 @@
     <Compile Include="Models\Data\ITransform.cs" />
     <Compile Include="Models\Data\Link.cs" />
     <Compile Include="Models\Data\Tag.cs" />
+    <Compile Include="Models\Data\Theme\AnimeSkyTheme.cs" />
+    <Compile Include="Models\Data\Theme\AuroraTheme.cs" />
     <Compile Include="Models\Data\Theme\LightTheme.cs" />
     <Compile Include="Models\Data\Theme\NightTheme.cs" />
     <Compile Include="Models\Data\Theme\RainTheme.cs" />
@@ -191,9 +193,6 @@
     <Compile Include="Views\SettingFrame.xaml.cs">
       <DependentUpon>SettingFrame.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\testViewsa\NavigationItem.xaml.cs">
-      <DependentUpon>NavigationItem.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\WarehouseIndexFrame.xaml.cs">
       <DependentUpon>WarehouseIndexFrame.xaml</DependentUpon>
     </Compile>
@@ -208,6 +207,7 @@
     <Content Include="Assets\Background\2.jpg" />
     <Content Include="Assets\Background\3.jpg" />
     <Content Include="Assets\Background\4.jpg" />
+    <Content Include="Assets\Background\animeSky.png" />
     <Content Include="Assets\background_1.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -224,9 +224,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sql\Tags.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Theme\background_1.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Properties\Default.rd.xml" />
@@ -268,10 +265,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SettingFrame.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\testViewsa\NavigationItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -8,10 +8,7 @@
     xmlns:models="using:MyWareHouse.Models.Data"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:viewModels="using:MyWareHouse.ViewModels"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    Loading="{x:Bind indexFrameViewModel.Page_Loading}"
-    RequestedTheme="Light">
-
+    Loading="{x:Bind indexFrameViewModel.Page_Loading}">
     <Page.Resources>
         <ResourceDictionary Source="/Assets/Theme/DefaultTheme.xaml" />
     </Page.Resources>
@@ -52,7 +49,6 @@
             MenuItemTemplate="{StaticResource IndexLeftMenuItem}"
             MenuItemsSource="{x:Bind indexFrameViewModel.Categories, Mode=OneWay}"
             PaneDisplayMode="Auto"
-            PaneTitle="sda"
             SelectionChanged="{x:Bind indexFrameViewModel.leftBar_SelectionChanged}">
             <Frame
                 x:Name="ContentFrame"
@@ -60,7 +56,7 @@
                 HorizontalAlignment="Stretch">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
-                        <NavigationThemeTransition />
+                        <NavigationThemeTransition/>
                     </TransitionCollection>
                 </Frame.ContentTransitions>
             </Frame>

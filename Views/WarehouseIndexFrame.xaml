@@ -3,55 +3,19 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:common="using:MyWareHouse.Common"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:MyWareHouse.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="using:MyWareHouse.Models.Data"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:viewModels="using:MyWareHouse.ViewModels"
     Background="#00000000"
     Loading="Page_Loading"
     mc:Ignorable="d">
-
-    <Page.Resources>
-        <ResourceDictionary Source="/Assets/Theme/DefaultTheme.xaml" />
-    </Page.Resources>
     <Grid HorizontalAlignment="Stretch">
         <Grid.Resources>
             <DataTemplate x:Key="ImageTemplate" x:DataType="model:GameBar">
-                <!--<StackPanel
-                x:Name="TransformeControl"
-                Width="200"
-                Height="300"
-                Background="Orange">
-                <Image Source="/Assets/background_1.jpg" Width="200" Height="300" Stretch="UniformToFill" Visibility="Collapsed"/>
-                <TextBlock
-                    Width="400"
-                    d:LayoutRounding="Auto"
-                    FontSize="400"
-                    FontWeight="ExtraBlack"
-                    Foreground="#55ffffff"
-                    Text="{x:Bind ShowTitle[0]}"
-                    Translation="0,-100,0"
-                    UseLayoutRounding="False">
-                </TextBlock>
-                <TextBlock
-                    Width="300"
-                    d:LayoutRounding="Auto"
-                    FontSize="300"
-                    FontWeight="ExtraBlack"
-                    Foreground="#55ffffff"
-                    RenderTransformOrigin="0.5,0"
-                    Text="{x:Bind ShowTitle[1]}"
-                    Translation="0,-550,0"
-                    UseLayoutRounding="False">
-                    <TextBlock.RenderTransform>
-                        <RotateTransform Angle="10" />
-                    </TextBlock.RenderTransform>
-                </TextBlock>
-            </StackPanel>-->
-
                 <StackPanel
                     x:Name="TransformeControl"
                     Width="220"
@@ -115,7 +79,7 @@
             Orientation="Vertical">
             <TextBlock
                 FontSize="28"
-                Foreground="{ThemeResource FontColor}"
+                Foreground="{x:Bind ViewModel.ThemeFactory.Theme.FontColor, Mode=OneWay}"
                 Text="主页" />
             <!--<Rectangle Height="1.2" Fill="#000"></Rectangle>-->
         </StackPanel>
@@ -124,7 +88,7 @@
             <Grid>
                 <Grid.Transitions>
                     <TransitionCollection>
-                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="20"/>
+                        <EntranceThemeTransition FromVerticalOffset="20" IsStaggeringEnabled="True" />
                     </TransitionCollection>
                 </Grid.Transitions>
                 <Grid.RowDefinitions>
@@ -146,7 +110,7 @@
                         FontSize="25"
                         Foreground="#fff"
                         Opacity="0.5"
-                        Text="{x:Bind viewModel.WeekTitle, Mode=OneWay}" />
+                        Text="{x:Bind ViewModel.WeekTitle, Mode=OneWay}" />
                     <StackPanel Grid.Row="2" Orientation="Horizontal">
                         <TextBlock
                             Grid.Row="2"
@@ -154,14 +118,14 @@
                             FontFamily="黑体"
                             FontSize="50"
                             Foreground="#fff"
-                            Text="{x:Bind viewModel.Hello, Mode=OneWay}" />
+                            Text="{x:Bind ViewModel.Hello, Mode=OneWay}" />
                         <TextBlock
                             Grid.Row="2"
                             Margin="16,0,0,0"
                             FontFamily="黑体"
                             FontSize="50"
                             Foreground="#fff"
-                            Text="{x:Bind viewModel.AcountName, Mode=OneWay}" />
+                            Text="{x:Bind ViewModel.AcountName, Mode=OneWay}" />
                     </StackPanel>
                 </Grid>
                 <StackPanel
@@ -170,9 +134,9 @@
                     Orientation="Vertical">
                     <TextBlock
                         FontSize="20"
-                        Foreground="{ThemeResource FontColor}"
+                        Foreground="{x:Bind ViewModel.ThemeFactory.Theme.FontColor}"
                         Text="最近游玩" />
-                    <Rectangle Height="1.2" Fill="{ThemeResource NotificationBarColor}" />
+                    <Rectangle Height="1.2" Fill="{x:Bind ViewModel.ThemeFactory.Theme.FontColor}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
@@ -182,16 +146,16 @@
                         Width=" 450"
                         Height="299"
                         Margin="0,-8,16,0"
-                        Background="{x:Bind viewModel.ThemeFactory.Theme.GameBarColor}" />
+                        Background="{x:Bind ViewModel.ThemeFactory.Theme.GameBarColor}" />
                     <GridView
                         x:Name="gridViewTransform"
                         IsItemClickEnabled="True"
                         ItemClick="GameBarItem_Click"
                         ItemTemplate="{StaticResource ImageTemplate}"
-                        ItemsSource="{x:Bind viewModel.LastPlyGames}">
+                        ItemsSource="{x:Bind ViewModel.LastPlyGames}">
                         <GridView.ItemContainerTransitions>
                             <TransitionCollection>
-                                <EntranceThemeTransition FromHorizontalOffset="1" IsStaggeringEnabled="True"></EntranceThemeTransition>
+                                <EntranceThemeTransition FromHorizontalOffset="1" IsStaggeringEnabled="True" />
                             </TransitionCollection>
                         </GridView.ItemContainerTransitions>
                         <GridView.ItemContainerStyle>
@@ -221,22 +185,19 @@
                     Orientation="Vertical">
                     <TextBlock
                         FontSize="20"
-                        Foreground="{ThemeResource FontColor}"
+                        Foreground="{x:Bind ViewModel.ThemeFactory.Theme.FontColor}"
                         Text="所有游戏" />
-                    <Rectangle Height="1.2" Fill="{ThemeResource NotificationBarColor}" />
+                    <Rectangle Height="1.2" Fill="{x:Bind ViewModel.ThemeFactory.Theme.FontColor}" />
                 </StackPanel>
-                <StackPanel
-                    Grid.Row="4"
-                    Margin="12,0,0,0"
-                    >
+                <StackPanel Grid.Row="4" Margin="12,0,0,0">
                     <controls:AdaptiveGridView
                         x:Name="AllGameGridView"
+                        DesiredWidth="220"
                         IsItemClickEnabled="True"
                         ItemClick="GameBarItem_AllGameBar_Click"
                         ItemHeight="300"
-                        DesiredWidth="220"
                         ItemTemplate="{StaticResource ImageTemplate}"
-                        ItemsSource="{x:Bind viewModel.AllGames}">
+                        ItemsSource="{x:Bind ViewModel.AllGames}">
                         <GridView.ItemContainerStyle>
                             <Style TargetType="GridViewItem">
                                 <Setter Property="Margin" Value="12,5,12,5" />

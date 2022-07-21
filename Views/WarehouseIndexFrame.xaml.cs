@@ -31,6 +31,12 @@ namespace MyWareHouse.Views
 
         private WarehouseIndexFrameViewModel viewModel;
 
+        internal WarehouseIndexFrameViewModel ViewModel
+        {
+            get => viewModel;
+            set => viewModel = value;
+        }
+
         private Models.Data.GameBar _gameBar;
 
         public WarehouseIndexFrame()

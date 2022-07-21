@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 namespace MyWareHouse.ViewModels
@@ -16,6 +17,16 @@ namespace MyWareHouse.ViewModels
     {
         private ThemeFactory _theme;
         private string _text;
+        private IList<ThemeBase> _themes;
+
+        /// <summary>
+        /// 获取主题实例
+        /// </summary>
+        public IList<ThemeBase> Themes
+        {
+            get => _themes;
+            set => SetProperty(ref _themes, value);
+        }
 
         public string Text
         {
@@ -40,7 +51,20 @@ namespace MyWareHouse.ViewModels
             
             Theme = ThemeFactory.Instance;
             Text = "ceshi1";
+            Themes = Theme.GetAllThemes();
         }
 
+        /// <summary>
+        /// 主题切换事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void ThemeItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is ThemeBase theme)
+            {
+                ThemeFactory.Instance.Theme = theme;
+            }
+        }
     }
 }

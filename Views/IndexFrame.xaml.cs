@@ -41,6 +41,12 @@ namespace MyWareHouse.Views
         /// 数据绑定
         /// </summary>
         private ViewModels.IndexFrameViewModel indexFrameViewModel;
+
+        internal ViewModels.IndexFrameViewModel ViewModels
+        {
+            get => indexFrameViewModel;
+            set => indexFrameViewModel = value;
+        }
         public IndexFrame()
         {
             this.InitializeComponent();

@@ -13,9 +13,15 @@ namespace MyWareHouse.Models.Data.Theme
     {
         private Brush _fontColor;
         private Brush _themeColor;
+        private Brush _themeColorLight;
+        private Brush _themeColorDeep;
         private Color _themecolor;
         private Brush _background;
         private Brush _gameBarColor = new SolidColorBrush(Color.FromArgb(255, 255, 174, 82));
+
+        public ThemeBase()
+        {
+        }
         /// <summary> 
         /// 游戏标识栏颜色 颜色默认为 255, 174, 82 的橙色
         /// </summary>
@@ -46,6 +52,34 @@ namespace MyWareHouse.Models.Data.Theme
             set
             {
                 this.SetProperty(ref _themeColor, value);
+            }
+        }
+        /// <summary>
+        /// 主题颜色
+        /// </summary>
+        public Brush ThemeColorLight
+        {
+            get
+            {
+                return _themeColorLight;
+            }
+            set
+            {
+                this.SetProperty(ref _themeColorLight, value);
+            }
+        }
+        /// <summary>
+        /// 主题颜色
+        /// </summary>
+        public Brush ThemeColorDeep
+        {
+            get
+            {
+                return _themeColorDeep;
+            }
+            set
+            {
+                this.SetProperty(ref _themeColorDeep, value);
             }
         }
         /// <summary>
