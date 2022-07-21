@@ -30,12 +30,13 @@
             </CommandBarFlyout>
             <DataTemplate x:Key="IndexLeftMenuItem" x:DataType="models:GameBar">
                 <muxc:NavigationViewItem
-                    Loading="NavigationViewItem_Loading"
                     Content="{x:Bind Title}"
+                    Loading="NavigationViewItem_Loading"
                     MenuItemsSource="{x:Bind Children, Mode=OneWay}"
                     RightTapped="NavigationViewItem_RightTapped"
                     Tag="{x:Bind Myself}"
-                    ToolTipService.ToolTip="{x:Bind Title}" />
+                    ToolTipService.ToolTip="{x:Bind Title}">
+                </muxc:NavigationViewItem>
             </DataTemplate>
             <CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
         </Grid.Resources>
@@ -48,6 +49,7 @@
             Loaded="leftBar_Loaded"
             MenuItemTemplate="{StaticResource IndexLeftMenuItem}"
             MenuItemsSource="{x:Bind indexFrameViewModel.Categories, Mode=OneWay}"
+            OpenPaneLength="200"
             PaneDisplayMode="Auto"
             SelectionChanged="{x:Bind indexFrameViewModel.leftBar_SelectionChanged}">
             <Frame
@@ -56,7 +58,7 @@
                 HorizontalAlignment="Stretch">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
-                        <NavigationThemeTransition/>
+                        <NavigationThemeTransition />
                     </TransitionCollection>
                 </Frame.ContentTransitions>
             </Frame>

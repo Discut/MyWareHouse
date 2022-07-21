@@ -3,6 +3,7 @@ using MyWareHouse.Models.ThemeService;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,16 @@ namespace MyWareHouse.ViewModels
         public GameInfoFrameViewModel()
         {
             ThemeFactory = ThemeFactory.Instance;
+            IList<Tag> tags = new List<Tag>();
+            tags.Add(new Tag() { Title = "tag1111111111111111" });
+            tags.Add(new Tag() { Title = "tag2" });
+            tags.Add(new Tag() { Title = "tag3" });
+            Tags = tags;
+            //ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
+            //tags.Add(new Tag() { Title = "tag1" });
+            //tags.Add(new Tag() { Title = "tag2" });
+            //tags.Add(new Tag() { Title = "tag3" });
+            //Tags = tags;
         }
 
         private Game _game;
@@ -34,6 +45,37 @@ namespace MyWareHouse.ViewModels
         {
             get => _game;
             set => SetProperty(ref _game, value);
+        }
+
+        private IList<Tag> _tags;
+        /// <summary>
+        /// 标签
+        /// </summary>
+        internal IList<Tag> Tags
+        {
+            get => _tags;
+            set
+            {
+                //IList<Tag> tags = new List<Tag>();
+                //foreach(Tag tag in value)
+                //{
+                //    tags.Add(tag);
+                //}
+                SetProperty(ref _tags, value);
+            }
+        }
+        
+        /// <summary>
+        /// 反转可见性 用于替代绑定的 ！ 符号
+        /// </summary>
+        /// <param name="visibility"></param>
+        /// <returns></returns>
+        public Visibility ReverseVisibility(Visibility visibility)
+        {
+            if (visibility == Visibility.Collapsed)
+                return Visibility.Visible;
+            else
+                return Visibility.Collapsed;
         }
 
         private string[] _titleChar = new string[] { "N", "O" };

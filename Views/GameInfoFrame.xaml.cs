@@ -23,6 +23,7 @@ using MyWareHouse.Models.GameService;
 using MyWareHouse.ViewModels;
 using Windows.UI;
 using Windows.System;
+using System.Collections.ObjectModel;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -53,7 +54,11 @@ namespace MyWareHouse.Views
             {
                 Update();
             };
+
+            this.DataContext = this;
         }
+
+        public ObservableCollection<Tag> Tags { get; set; } = new ObservableCollection<Tag>();
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -336,6 +341,114 @@ namespace MyWareHouse.Views
         private void Page_Loading(FrameworkElement sender, object args)
         {
             Update();
+        }
+
+        private void TokenBox_TokenItemAdding(Microsoft.Toolkit.Uwp.UI.Controls.TokenizingTextBox sender, Microsoft.Toolkit.Uwp.UI.Controls.TokenItemAddingEventArgs args)
+        {
+            // Take the user's text and convert it to our data type (if we have a matching one).
+            //args.Item = _samples.FirstOrDefault((item) => item.Text.Contains(e.TokenText, System.StringComparison.CurrentCultureIgnoreCase));
+            args.Item = Tags.FirstOrDefault((item) => item.Title.Contains(args.TokenText, System.StringComparison.CurrentCultureIgnoreCase));
+
+            foreach (Tag tag in Tags)
+            {
+                if (tag.Title == args.TokenText)
+                {
+                    args.Cancel = true;
+                    break ;
+                }
+            }
+
+            // Otherwise, create a new version of our data type
+            if (args.Item == null)
+            {
+                 args.Item = new Tag()
+                 {
+                      Title = args.TokenText
+                 };
+            }
+        }
+
+        private void TokenBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TagsBox.Visibility = Visibility.Visible;
+
+            IList<Tag> newTags = new List<Tag>();
+            foreach (Tag tag in Tags)
+                newTags.Add(tag);
+            ViewModel.Tags = newTags;
+            UPdateTags();
+        }
+
+        /// <summary>
+        /// 更新tag
+        /// </summary>
+        public void UPdateTags()
+        {
+            TagsBox.Children.Clear();
+            foreach(Tag tag in ViewModel.Tags)
+            {
+                Button button = new Button();
+                button.Content = tag.Title;
+                button.CornerRadius = new CornerRadius(2);
+                button.Margin = new Thickness(0, 0, 2, 0);
+                TagsBox.Children.Add(button);
+            }
+            Button addTag = new Button();
+            addTag.Content = new SymbolIcon(Symbol.Add);
+            addTag.CornerRadius = new CornerRadius(2);
+            addTag.Margin = new Thickness(0, 0, 2, 0);
+            addTag.Click += AddTag_Click;
+            TagsBox.Children.Add(addTag);
+        }
+
+        /// <summary>
+        /// 添加tag按钮触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AddTag_Click(object sender, RoutedEventArgs e)
+        {
+            // 隐藏tag展示box
+            TagsBox.Visibility = Visibility.Collapsed;
+            Tags.Clear();
+            foreach (Tag tag in ViewModel.Tags)
+            {
+                Tags.Add(tag);
+            }
+            // 让输入框获取焦点
+            TokenBox.Focus(FocusState.Programmatic);
+
+            
+
+        }
+
+        private void TagsBox_Loading_1(FrameworkElement sender, object args)
+        {
+            UPdateTags();
+        }
+        /// <summary>
+        /// 编辑评价按钮触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 隐藏自己
+            EvaluationBox.Visibility = Visibility.Collapsed;
+            // 让文本框获取焦点
+            EvaluationInputBox.Focus(FocusState.Programmatic);
+
+
+        }
+        /// <summary>
+        /// 保存评价按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            // 显示 显示评价盒子
+            EvaluationBox.Visibility = Visibility.Visible;
         }
 
     }
