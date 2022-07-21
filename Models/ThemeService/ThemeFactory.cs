@@ -1,6 +1,7 @@
 ﻿using MyWareHouse.Models.Data.Theme;
 using Prism.Mvvm;
 using System.Collections.Generic;
+using Windows.Storage;
 
 namespace MyWareHouse.Models.ThemeService
 {
@@ -16,6 +17,8 @@ namespace MyWareHouse.Models.ThemeService
             set
             {
                 this.SetProperty(ref themeBase, value);
+                ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+                localSettings.Values["ThemeName"] = value.GetType().Name;
             }
         }
         private static class Inner
@@ -23,10 +26,8 @@ namespace MyWareHouse.Models.ThemeService
             public static ThemeFactory themeFactory = new ThemeFactory();
         }
         private ThemeFactory() {
-            //ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            //ChangeThemeWith(localSettings.Values["ThemeName"] == null ? "" : localSettings.Values["ThemeName"].ToString());
-
-            this.themeBase = new RainTheme();
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+            ChangeThemeWith(localSettings.Values["ThemeName"] == null ? "" : localSettings.Values["ThemeName"].ToString());
         }
 
         public static ThemeFactory Instance { get { return Inner.themeFactory; } }
