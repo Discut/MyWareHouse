@@ -23,6 +23,13 @@ namespace MyWareHouse.Models.FavoriteService.Implement
             return FavoriteFactory.GetFavorite(newFavorite);
         }
 
+        public bool DeleteFavorite(string id)
+        {
+            DataAccessLibrary.DataBaseSetter.IFavoriteSetter setter = DataAccessLibrary.DataBaseFactory.GetInstance().GetFavoriteSetter();
+            setter.DeleteFavorite(int.Parse(id));
+            return true;
+        }
+
         public IList<Favorite> GetAllFavorites()
         {
             // 创建返回对象
@@ -35,6 +42,14 @@ namespace MyWareHouse.Models.FavoriteService.Implement
                 result.Add(Data.Factory.FavoriteFactory.GetFavorite(dic));
             }
             return result;
+        }
+
+        public void Rename(string id, string newName)
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            dic.Add("id", id);
+            dic.Add("name", newName);
+            DataAccessLibrary.DataBaseFactory.GetInstance().GetFavoriteSetter().UpdateFavorite(dic);
         }
     }
 }

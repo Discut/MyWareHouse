@@ -3,8 +3,6 @@
     NAME TEXT NOT NULL,
     info TEXT,
     path TEXT,
-    barImgPath TEXT,
-    coverImgPath TEXT,
     evaluation TEXT,
-    favoriteId INTEGER
+    favoriteId TEXT
 )

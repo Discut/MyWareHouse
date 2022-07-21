@@ -3,11 +3,14 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:control="using:MyWareHouse.Common"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="using:MyWareHouse.Models.Data"
     xmlns:local="using:MyWareHouse.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    xmlns:muxm="using:Microsoft.UI.Xaml.Media"
+    Background="{x:Bind ViewModel.ThemeFactory.Theme.ThemeColor, Mode=OneWay}"
     Loading="Page_Loading"
     mc:Ignorable="d">
     <Page.Resources>
@@ -16,47 +19,41 @@
                 <AppBarButton
                     Click="SetHeadImageAsync"
                     Label="设置头图"
-                    Visibility="{x:Bind IsShowSetHeadImage}" />
+                    Visibility="{x:Bind ViewModel.IsShowSetHeadImage, Mode=OneWay}" />
                 <AppBarButton
                     Click="ClearHeadImageAsync"
                     Label="清理头图"
-                    Visibility="{x:Bind IsShowClearHeadImage}" />
+                    Visibility="{x:Bind ViewModel.HeadImageStatu, Mode=OneWay}" />
                 <AppBarButton
                     Click="SetBackgroudImageAsync"
                     Label="设置背景"
-                    Visibility="{x:Bind IsShowSetBackgroundImage}" />
+                    Visibility="{x:Bind ViewModel.IsShowSetBackgroundImage, Mode=OneWay}" />
                 <AppBarButton
                     Click="ClearBackgroudImageAsync"
                     Label="清理背景"
-                    Visibility="{x:Bind IsShowClearBackgroundImage}" />
+                    Visibility="{x:Bind ViewModel.BGIStatu, Mode=OneWay}" />
                 <AppBarSeparator />
                 <AppBarButton Icon="Setting" Label="属性设置" />
             </CommandBarFlyout.SecondaryCommands>
         </CommandBarFlyout>
-        <muxc:MenuBar x:Name="MenuBarText">
-            <muxc:MenuBarItem Title="File">
-                <MenuFlyoutSubItem Text="New">
-                    <MenuFlyoutItem Text="Plain Text Document" />
-                    <MenuFlyoutItem Text="Rich Text Document" />
-                    <MenuFlyoutItem Text="Other Formats..." />
-                </MenuFlyoutSubItem>
-                <MenuFlyoutItem Text="Open..." />
-                <MenuFlyoutItem Text="Save" />
-                <MenuFlyoutSeparator />
-                <MenuFlyoutItem Text="Exit" />
-            </muxc:MenuBarItem>
-        </muxc:MenuBar>
+        <DataTemplate x:Key="TagBox" x:DataType="data:Tag">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Text="{x:Bind Title}" />
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
 
-    <Grid RightTapped="Grid_RightTapped">
-        <Grid.Background>
-            <ImageBrush x:Name="BackgroundBrush" />
-        </Grid.Background>
-        <!--<Image Source="/Assets/background_1.jpg" Height="1080" Width="1920"/>-->
-        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+    <Grid x:Name="BackgroundLayout" RightTapped="Grid_RightTapped">
+        <StackPanel
+            x:Name="GameInfoBox"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom">
             <StackPanel.Background>
-                <LinearGradientBrush StartPoint="0.5 0.16" EndPoint="0.5 1">
-                    <GradientStop Offset=".4" Color="#fff" />
+                <LinearGradientBrush Opacity="{x:Bind ViewModel.GameInfoBoxBackgroundOpacity, Mode=OneWay}" StartPoint="1,0" EndPoint="1,1">
+                    <GradientStop Offset="1" Color="#fff" />
                     <GradientStop Offset="0" Color="#00ffffff" />
                 </LinearGradientBrush>
             </StackPanel.Background>
@@ -73,17 +70,49 @@
                         Width="250"
                         Height="380"
                         HorizontalAlignment="Left"
-                        Background="Orange"
-                        CornerRadius="8">
+                        Background="{x:Bind ViewModel.ThemeFactory.Theme.GameBarColor, Mode=OneWay}"
+                        CornerRadius="3">
                         <StackPanel.BackgroundTransition>
                             <BrushTransition />
                         </StackPanel.BackgroundTransition>
+                        <StackPanel
+                            Width="250"
+                            Height="380"
+                            VerticalAlignment="Stretch">
+                            <TextBlock
+                                Width="450"
+                                Margin="-80,0,0,0"
+                                d:LayoutRounding="Auto"
+                                FontSize="450"
+                                FontWeight="ExtraBlack"
+                                Foreground="#55ffffff"
+                                Text="{x:Bind ViewModel.TitleChar[0], Mode=OneWay}"
+                                Translation="50,-200,0"
+                                UseLayoutRounding="False">
+                                <TextBlock.RenderTransform>
+                                    <RotateTransform Angle="10" />
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            <TextBlock
+                                Width="300"
+                                d:LayoutRounding="Auto"
+                                FontSize="300"
+                                FontWeight="ExtraBlack"
+                                Foreground="#55ffffff"
+                                RenderTransformOrigin="0.5,0"
+                                Text="{x:Bind ViewModel.TitleChar[1], Mode=OneWay}"
+                                Translation="0,-530,0"
+                                UseLayoutRounding="False" />
+                        </StackPanel>
                         <Image
                             x:Name="HeadImage"
                             Width="250"
                             Height="380"
-                            Stretch="UniformToFill" />
+                            Margin="0,-380,0,0"
+                            Stretch="UniformToFill"
+                            Visibility="{x:Bind ViewModel.HeadImageStatu, Mode=OneWay}" />
                     </StackPanel>
+
                     <StackPanel
                         Grid.Column="2"
                         VerticalAlignment="Top"
@@ -94,17 +123,22 @@
                                 <RowDefinition Height="50" />
                                 <RowDefinition Height="40" />
                                 <RowDefinition Height="*" />
+                                <RowDefinition Height="40" />
                             </Grid.RowDefinitions>
                             <TextBlock
                                 Grid.Row="0"
                                 FontSize="52"
-                                Text="{x:Bind Title, Mode=OneTime}" />
+                                Foreground="{x:Bind Path=ViewModel.ThemeFactory.Theme.FontColor, Mode=OneWay}"
+                                Text="{x:Bind Title, Mode=OneWay}" />
                             <TextBlock Grid.Row="1" Text="• 2022-2-21" />
+
+
+
                             <StackPanel
                                 Grid.Row="2"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Stretch"
                                 VerticalAlignment="Top"
-                                Orientation="Horizontal">
+                                Orientation="Vertical">
                                 <StackPanel.Resources>
                                     <Style TargetType="Button">
                                         <Setter Property="Margin" Value="10,0,0,0" />
@@ -115,19 +149,88 @@
                                         <PopupThemeTransition />
                                     </TransitionCollection>
                                 </StackPanel.ChildrenTransitions>
+                                <StackPanel Margin="0,-10,0,0" VerticalAlignment="Stretch">
+                                    <controls:TokenizingTextBox
+                                        x:Name="TokenBox"
+                                        Height="40"
+                                        MaxHeight="40"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        ItemsSource="{Binding Tags, Mode=OneWay}"
+                                        LostFocus="TokenBox_LostFocus"
+                                        MaximumTokens="6"
+                                        PlaceholderText="添加新标签（失去焦点后自动保存）"
+                                        TextMemberPath="Title"
+                                        TokenDelimiter=","
+                                        TokenItemAdding="TokenBox_TokenItemAdding"
+                                        Visibility="{x:Bind ViewModel.ReverseVisibility(TagsBox.Visibility), Mode=OneWay}">
+                                        <controls:TokenizingTextBox.SuggestedItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Padding="4,0,0,0" Text="{Binding Title}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </controls:TokenizingTextBox.SuggestedItemTemplate>
+                                        <controls:TokenizingTextBox.TokenItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Padding="4,0,0,0" Text="{Binding Title}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </controls:TokenizingTextBox.TokenItemTemplate>
+                                    </controls:TokenizingTextBox>
+                                </StackPanel>
 
-                                <Button Grid.Row="0" Content="角色扮演" />
-                                <Button Grid.Row="0" Content="扮演" />
-                                <Button Grid.Row="0" Content="角色扮演" />
-                                <Button Content="角色扮演" />
-                                <Button Content="角演" />
-                                <Button Content="角色扮演" />
-                                <Button Content="扮演" />
-                                <Button Content="角色kkkkkkkkkkkk演" />
-                                <Button Content="角色扮演" />
+                                <StackPanel
+                                    x:Name="TagsBox"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    Loading="TagsBox_Loading_1"
+                                    Orientation="Horizontal"
+                                    Visibility="Visible" />
                             </StackPanel>
+
+
+
                             <StackPanel
                                 Grid.Row="3"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                Orientation="Horizontal">
+                                <StackPanel
+                                    x:Name="EvaluationBox"
+                                    VerticalAlignment="Top"
+                                    Orientation="Horizontal"
+                                    Visibility="Visible">
+                                    <TextBlock FontWeight="Normal" Text="我的评价:" />
+                                    <HyperlinkButton
+                                        Margin="0,-5,0,0"
+                                        Click="HyperlinkButton_Click"
+                                        Content="编辑" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Visibility="{x:Bind ViewModel.ReverseVisibility(EvaluationBox.Visibility), Mode=OneWay}">
+                                    <TextBox
+                                        x:Name="EvaluationInputBox"
+                                        MinWidth="450"
+                                        MaxHeight="100"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        AcceptsReturn="True"
+                                        IsSpellCheckEnabled="True"
+                                        TextWrapping="Wrap" />
+                                    <StackPanel Margin="0,4,0,0" Orientation="Horizontal">
+                                        <Button
+                                            Margin="0,0,4,0"
+                                            Click="Button_Click_3"
+                                            Content="保存"
+                                            Style="{StaticResource AccentButtonStyle}" />
+                                        <Button Content="取消" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="4"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Bottom"
                                 Orientation="Vertical">
@@ -151,5 +254,6 @@
                 </Grid>
             </StackPanel>
         </StackPanel>
+        <StackPanel x:Name="sa" />
     </Grid>
 </Page>

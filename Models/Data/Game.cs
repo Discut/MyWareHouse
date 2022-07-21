@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace MyWareHouse.Models.Data
 {
-    class Game
+    class Game : ITransform
     {
         internal Game() { }
 
         private string _name;
         private string _id;
-        private string _barImgPath;
-        private string _coverImgPath;
         private string _applicationPath;
         private string _favorite = "未分类";
         private string _favoriteId;
@@ -59,21 +57,6 @@ namespace MyWareHouse.Models.Data
             set { _favorite = value; }
         }
 
-
-        public string CoverImgPath
-        {
-            get { return _coverImgPath; }
-            set { _coverImgPath = value; }
-        }
-
-
-        public string BarImgPath
-        {
-            get { return _barImgPath; }
-            set { _barImgPath = value; }
-        }
-
-
         public string Name
         {
             get { return _name; }
@@ -87,5 +70,16 @@ namespace MyWareHouse.Models.Data
             set { _id = value; }
         }
 
+        public IDictionary<string, object> toDinctionary()
+        {
+            var dic = new Dictionary<string, object>();
+            dic.Add("id", Id);
+            dic.Add("name", Name);
+            dic.Add("info", Info);
+            dic.Add("favoriteId", FavoriteId);
+            dic.Add("evaluation", Evaluation);
+            dic.Add("path", ApplicationPath);
+            return dic;
+        }
     }
 }

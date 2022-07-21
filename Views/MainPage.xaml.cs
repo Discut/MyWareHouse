@@ -19,6 +19,7 @@ using Microsoft.Data.Sqlite;
 using Windows.Storage;
 using DataAccessLibrary;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Json;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -34,52 +35,20 @@ namespace MyWareHouse.Views
         {
             this.InitializeComponent();
             this.mainPageViewModel = new ViewModels.MainPageViewModel();
-            this.DataContext = this.mainPageViewModel;   
+            this.DataContext = this.mainPageViewModel;
+
+            //Hide default title bar.
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+
+            var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
         }
 
         private async Task init()
         {
             await Models.AppInitializer.Instance.Init();
-            
-
-            // 测试代码
-
-            // 创建文件
-            StorageFolder folder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            StorageFile file = await folder.CreateFileAsync("dark.png", CreationCollisionOption.OpenIfExists);
-
-            
-            //await FileIO.WriteTextAsync(file, "Write text to file.");
-            //// 2  从文本读取文件
-            //StorageFolder folder1 = Windows.Storage.ApplicationData.Current.LocalFolder;
-            //StorageFile file1 = await folder.GetFileAsync("New Document.txt");
-            //string text = await Windows.Storage.FileIO.ReadTextAsync(file1);
-
-            //Windows.Storage.Streams.IBuffer asyncOperation = await FileIO.ReadBufferAsync(file1);
-
-
-
-
-            ImageBrush img = new ImageBrush();
-
-            BitmapImage bitmapImage = new BitmapImage();
-            Windows.Storage.Streams.IRandomAccessStream randomAccessStream = await file.OpenAsync(FileAccessMode.Read);
-
-
-            
-            await bitmapImage.SetSourceAsync(randomAccessStream);
-            bitmapImage.DecodePixelWidth = bitmapImage.PixelWidth;
-            bitmapImage.DecodePixelHeight = bitmapImage.PixelHeight;
-
-
-            img.ImageSource = bitmapImage;
-            //ImageSource imageSource = new ImageSource();
-            //imageSource.
-
-
-
-
-
         }
 
         private async void Page_LoadedAsync(object sender, RoutedEventArgs e)

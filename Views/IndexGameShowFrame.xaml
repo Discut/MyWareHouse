@@ -4,48 +4,67 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:control="using:MyWareHouse.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="using:MyWareHouse.Models.Data"
     xmlns:local="using:MyWareHouse.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="using:MyWareHouse.ViewModels"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-
-    <Page.Resources>
-        <DataTemplate x:Key="ImageTemplate" x:DataType="viewModels:GameBarItem">
-            <StackPanel
-                x:Name="TransformeControl"
-                Width="200"
-                Height="300"
-                Background="Orange">
-                <TextBlock
-                    Width="400"
-                    d:LayoutRounding="Auto"
-                    FontSize="400"
-                    FontWeight="ExtraBlack"
-                    Foreground="#55ffffff"
-                    Text="{x:Bind Title}"
-                    Translation="0,-100,0"
-                    UseLayoutRounding="False">
-                </TextBlock>
-                <TextBlock
-                    Width="300"
-                    d:LayoutRounding="Auto"
-                    FontSize="300"
-                    FontWeight="ExtraBlack"
-                    Foreground="#55ffffff"
-                    RenderTransformOrigin="0.5,0"
-                    Text="{x:Bind Favorite}"
-                    Translation="0,-550,0"
-                    UseLayoutRounding="False">
-                    <TextBlock.RenderTransform>
-                        <RotateTransform Angle="10" />
-                    </TextBlock.RenderTransform>
-                </TextBlock>
-            </StackPanel>
-        </DataTemplate>
-    </Page.Resources>
-    <Grid SizeChanged="Grid_SizeChanged">
+    <Grid Background="{x:Bind ViewModel.ThemeFactory.Theme.ThemeColor, Mode=OneWay}">
+        <Grid.Resources>
+            <DataTemplate x:Key="ImageTemplate" x:DataType="data:GameBar">
+                <StackPanel
+                    x:Name="TransformeControl"
+                    Width="200"
+                    Height="300"
+                    Background="{x:Bind TitleColor, Mode=OneWay}">
+                    <Image
+                        Width="200"
+                        Height="300"
+                        Stretch="UniformToFill"
+                        Visibility="Collapsed" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <TextBlock
+                                Margin="10,0,0,0"
+                                FontSize="24"
+                                Foreground="#fff"
+                                Text="{x:Bind Title}" />
+                            <Rectangle Height="1" Fill="#fff" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1">
+                            <TextBlock
+                                Width="400"
+                                d:LayoutRounding="Auto"
+                                FontSize="400"
+                                FontWeight="ExtraBlack"
+                                Foreground="#55ffffff"
+                                Text="{x:Bind ShowTitle[0]}"
+                                Translation="0,-160,0"
+                                UseLayoutRounding="False" />
+                            <TextBlock
+                                Width="300"
+                                d:LayoutRounding="Auto"
+                                FontSize="300"
+                                FontWeight="ExtraBlack"
+                                Foreground="#55ffffff"
+                                RenderTransformOrigin="0.5,0"
+                                Text="{x:Bind ShowTitle[1]}"
+                                Translation="0,-600,0"
+                                UseLayoutRounding="False">
+                                <TextBlock.RenderTransform>
+                                    <RotateTransform Angle="10" />
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="88" />
             <RowDefinition Height="*" />
@@ -54,16 +73,19 @@
             Grid.Row="0"
             Margin="16,40,16,0"
             Orientation="Vertical">
-            <TextBlock FontSize="28" Text="{x:Bind indexGameShowFrameViewModel.Title}" />
-            <!--<Rectangle Height="1.2" Fill="#000"></Rectangle>-->
+            <TextBlock
+                FontSize="28"
+                Foreground="{x:Bind ViewModel.ThemeFactory.Theme.FontColor, Mode=OneWay}"
+                Text="{x:Bind ViewModel.Title, Mode=OneTime}" />
         </StackPanel>
         <GridView
             x:Name="GameGridView"
             Grid.Row="1"
-            Margin="0,0,0,0"
-            HorizontalAlignment="Center"
+            Margin="24,0,0,0"
+            IsItemClickEnabled="True"
+            ItemClick="GameGridView_ItemClick"
             ItemTemplate="{StaticResource ImageTemplate}"
-            ItemsSource="{x:Bind indexGameShowFrameViewModel.gameBarItem}">
+            ItemsSource="{x:Bind ViewModel.GameBarItem, Mode=OneWay}">
             <GridView.ItemContainerStyle>
                 <Style x:Name="style" TargetType="GridViewItem">
                     <Setter x:Name="setter" Property="Margin" Value="0,16,24,16" />
@@ -72,24 +94,17 @@
             </GridView.ItemContainerStyle>
             <GridView.ItemContainerTransitions>
                 <TransitionCollection>
-                    <EntranceThemeTransition IsStaggeringEnabled="True" />
+                    <EntranceThemeTransition FromVerticalOffset="10" IsStaggeringEnabled="True" />
                 </TransitionCollection>
             </GridView.ItemContainerTransitions>
 
-
-            <!--
-                An extra property also needs to be added to the GridView's ItemsWrapGrid.
-                The following sets the maximum # of items to show before wrapping.
-            -->
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsWrapGrid x:Name="MaxItemsWrapGrid" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
         </GridView>
-        <!--<control:MyUserControl1>
 
-        </control:MyUserControl1>-->
     </Grid>
 
 

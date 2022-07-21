@@ -12,22 +12,40 @@ using Windows.UI.Xaml;
 using MyWareHouse.Models.GameService;
 using MyWareHouse.Models.FavoriteService;
 using MyWareHouse.Models.GameService.Implement;
+using Prism.Mvvm;
+using MyWareHouse.Models.ThemeService;
 
 namespace MyWareHouse.ViewModels
 {
-    class IndexFrameViewModel
+    class IndexFrameViewModel : BindableBase
     {
         private bool isChangeToIndex = false;
+        private ThemeFactory _theme;
+        /// <summary>
+        /// 主题工厂
+        /// </summary>
+        public ThemeFactory ThemeFactory
+        {
+            get { return _theme; }
+            set { SetProperty(ref _theme, value); }
+        }
         public Action<Page, object, Windows.UI.Xaml.Media.Animation.NavigationTransitionInfo> poinerAction;
-
+        /// <summary>
+        /// 默认选择调用方法
+        /// </summary>
         public Action selectDfaultItem;
 
         public IndexFrameViewModel()
         {
+            this.ThemeFactory = ThemeFactory.Instance;
         }
-
+        /// <summary>
+        /// 侧边栏绘制源
+        /// </summary>
         public ObservableCollection<GameBar> Categories = new ObservableCollection<GameBar>();
-
+        /// <summary>
+        /// footer栏绘制源
+        /// </summary>
         private ObservableCollection<GameBar> _footerMenu = new ObservableCollection<GameBar>()
         {
             new GameBar(null)
@@ -58,22 +76,33 @@ namespace MyWareHouse.ViewModels
             set { _footerMenu = value; }
         }
 
-
+        /// <summary>
+        /// 侧边栏某一模块被选中
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnItemInvoked(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewItemInvokedEventArgs e)
         {
             Microsoft.UI.Xaml.Controls.NavigationViewItem ItemContainer = (Microsoft.UI.Xaml.Controls.NavigationViewItem)e.InvokedItemContainer;
-
-            if (ItemContainer.Tag as String == "AddGame")
+            if (ItemContainer == null)
+                return;
+            if (ItemContainer.Tag is GameBar gameBar)
             {
-                IntoFrame(null, "Index");
-                AddNewGame();
+                if (gameBar.Tag as String == "AddGame")
+                {
+                    AddNewGame();
+                }
+                else if (gameBar.Tag as String == "AddFavorite")
+                {
+                    AddFavorite();
+                }
+                else
+                    IntoFrame(sender, gameBar.Tag);
             }
-            else if (ItemContainer.Tag as String == "AddFavorite")
+            else if (e.IsSettingsInvoked)
             {
-                AddFavorite();
+                IntoFrame(sender, "Setting");
             }
-            else
-                IntoFrame(sender, ItemContainer.Tag);
             //sender.Header = invokedItem;
 
             
@@ -93,26 +122,30 @@ namespace MyWareHouse.ViewModels
             //}
         }
 
+        private void FastIntoFrame(string tag, object arg)
+        {
+            switch (tag as string)
+            {
+                case "Game"://new DrillInNavigationTransitionInfo()
+                    this.poinerAction?.Invoke(new Views.GameInfoFrame(), arg, new EntranceNavigationTransitionInfo());
+                    break;
+                case "Index":
+                    this.poinerAction?.Invoke(new Views.WarehouseIndexFrame(), null, new EntranceNavigationTransitionInfo());
+                    break;
+                case "Favorite":
+                    this.poinerAction?.Invoke(new Views.IndexGameShowFrame(), arg, new EntranceNavigationTransitionInfo());
+                    break;
+                case "Setting":
+                    this.poinerAction?.Invoke(new Views.SettingFrame(), null, new EntranceNavigationTransitionInfo());
+                    break;
+            }
+        }
         private void IntoFrame(Microsoft.UI.Xaml.Controls.NavigationView sender, object tag)
         {
             object selectedItem = null;
             if (sender != null)
                 selectedItem = sender.SelectedItem;
-            switch (tag as string)
-                {
-                    case "Game":
-                        this.poinerAction?.Invoke(new Views.GameInfoFrame(), selectedItem, new DrillInNavigationTransitionInfo());
-                        break;
-                    case "Index":
-                        this.poinerAction?.Invoke(new Views.WarehouseIndexFrame(), null, new EntranceNavigationTransitionInfo());
-                        break;
-                    case "Favorite":
-                        this.poinerAction?.Invoke(new Views.IndexGameShowFrame(), selectedItem, new EntranceNavigationTransitionInfo());
-                        break;
-                    case "设置":
-                        this.poinerAction?.Invoke(new Views.SettingFrame(), null, new EntranceNavigationTransitionInfo());
-                        break;
-                }
+            FastIntoFrame(tag as string, selectedItem);
             
         }
 
@@ -174,6 +207,33 @@ namespace MyWareHouse.ViewModels
             };
             await dialog.ShowAsync();
         }
+
+        internal void ReName(GameBar target, string newName)
+        {
+            switch (target.Tag)
+            {
+                case "Game":
+                    Game game = target.Game;
+                    game.Name = newName;
+                    target.Title = newName;
+                    //target.Title = newName;
+                    GameServiceFactory.GetGameModifyService().UpdataGame(game);
+                    Update();
+                    break;
+                case "Favorite":
+                    FavoriteServiceFactory.Setter().Rename(target.Id, newName);
+                    for (int i = 0; i < Categories.Count; i++)
+                    {
+                        if (Categories[i].Id == target.Id)
+                        {
+                            Categories[i].Title = newName;
+                        }
+                    }
+                    Update();
+                    break;
+            }
+        }
+
         /// <summary>
         /// 更新数据
         /// </summary>
@@ -186,26 +246,67 @@ namespace MyWareHouse.ViewModels
             {
                 this.Categories.Add(bar);
             }
+            // 使用默认选择
             selectDfaultItem?.Invoke();
         }
-        ///// <summary>
-        ///// 重名名游戏
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //public void ReName(object sender, RoutedEventArgs e)
-        //{
-
-        //}
-
+        /// <summary>
+        /// 页面加载中
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public void Page_Loading(FrameworkElement sender, object args)
         {
             Update();
+            selectDfaultItem?.Invoke();
+        }
+        /// <summary>
+        /// 把游戏移动至某收藏夹
+        /// </summary>
+        /// <param name="sender">目标收藏夹</param>
+        /// <param name="target">游戏对象</param>
+        internal void MoveToFavorite(object sender, GameBar target)
+        {
+            Game game = target.Game;
+            if (null == game)
+                return;
+            if (sender is Favorite favorite)
+            {
+                game.FavoriteId = favorite.Id;
+                GameServiceFactory.GetGameModifyService().UpdataGame(game);
+                Update();
+
+            }
+        }
+        internal void DeleteGame(GameBar target)
+        {
+            if (null == target)
+                return;
+            GameServiceFactory.GetGameModifyService().DeleteGame(target.Game);
+            Update();
         }
 
-        public void Page_Loaded(object sender, RoutedEventArgs e)
+        internal void DeleteFavorite(Favorite target)
         {
-
+            if (null == target)
+                return;
+            IList<Game> games = GameServiceFactory.GetGameGetterService().GetAllGamesBy(target);
+            foreach(Game game in games)
+            {
+                game.FavoriteId = "";
+                GameServiceFactory.GetGameModifyService().UpdataGame(game);
+            }
+            FavoriteServiceFactory.Setter().DeleteFavorite(target.Id);
+            Update();
+        }
+        internal void MoveOutFavorite(GameBar target)
+        {
+            if (null == target)
+                return;
+            Game game = target.Game;
+            game.FavoriteId = "";
+            game.Favorite = "";
+            GameServiceFactory.GetGameModifyService().UpdataGame(game);
+            Update();
         }
     }
 }

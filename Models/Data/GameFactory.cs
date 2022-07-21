@@ -22,27 +22,15 @@ namespace MyWareHouse.Models.Data
             game.Id = id;
             return game;
         }
-        public static Game GetGame(string id, string name, string barImgPath, string applicationPath)
+        public static Game GetGame(string id, string name, string info, string applicationPath)
         {
             Game game = GameFactory.GetGame(id, name, applicationPath);
-            game.CoverImgPath = barImgPath;
-            return game;
-        }
-        public static Game GetGame(string id, string name, string barImgPath, string coverImgPath, string applicationPath)
-        {
-            Game game = GameFactory.GetGame(id, name, barImgPath, applicationPath);
-            game.BarImgPath = coverImgPath;
-            return game;
-        }
-        public static Game GetGame(string id, string name, string info, string barImgPath, string coverImgPath, string applicationPath)
-        {
-            Game game = GameFactory.GetGame(id, name, barImgPath, coverImgPath, applicationPath);
             game.Info = info;
             return game;
         }
-        public static Game GetGame(string id, string name, string info, string barImgPath, string coverImgPath, string applicationPath, string evaluation)
+        public static Game GetGame(string id, string name, string info, string applicationPath, string evaluation)
         {
-            Game game = GameFactory.GetGame(id, name, info, barImgPath, coverImgPath, applicationPath);
+            Game game = GameFactory.GetGame(id, name, info, applicationPath);
             game.Evaluation = evaluation;
             return game;
         }
@@ -51,11 +39,11 @@ namespace MyWareHouse.Models.Data
              Game game = GetGame(
                 info["id"].ToString(), 
                 info["name"].ToString(), 
-                info["info"].ToString(), 
-                info["barImgPath"].ToString(), 
-                info["coverImgPath"].ToString(), 
+                info["info"].ToString(),
                 info["path"].ToString(), 
                 info["evaluation"].ToString());
+            if (info.ContainsKey("id"))
+                game.FavoriteId= info["favoriteId"].ToString();
 
             //if (info["id"] == null)
             //    game.

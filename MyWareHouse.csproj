@@ -12,7 +12,7 @@
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -143,6 +143,13 @@
     <Compile Include="Models\Data\ITransform.cs" />
     <Compile Include="Models\Data\Link.cs" />
     <Compile Include="Models\Data\Tag.cs" />
+    <Compile Include="Models\Data\Theme\AnimeSkyTheme.cs" />
+    <Compile Include="Models\Data\Theme\AuroraTheme.cs" />
+    <Compile Include="Models\Data\Theme\LightTheme.cs" />
+    <Compile Include="Models\Data\Theme\NightTheme.cs" />
+    <Compile Include="Models\Data\Theme\RainTheme.cs" />
+    <Compile Include="Models\Data\Theme\ShamrockTheme.cs" />
+    <Compile Include="Models\Data\Theme\ThemeBase.cs" />
     <Compile Include="Models\FavoriteService\IFavoriteGetter.cs" />
     <Compile Include="Models\FavoriteService\FavoriteServiceFactory.cs" />
     <Compile Include="Models\FavoriteService\IFavoriteSetter.cs" />
@@ -162,9 +169,13 @@
     <Compile Include="Models\GameService\IGameStartService.cs" />
     <Compile Include="Models\GameService\IGameModifyService.cs" />
     <Compile Include="Models\IAppInitializer.cs" />
+    <Compile Include="Models\SettingService\ISettingService.cs" />
+    <Compile Include="Models\ThemeService\ThemeFactory.cs" />
+    <Compile Include="ViewModels\GameInfoFrameViewModel.cs" />
     <Compile Include="ViewModels\IndexFrameViewModel.cs" />
     <Compile Include="ViewModels\IndexGameShowFrameViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\SettingFrameViewModel.cs" />
     <Compile Include="ViewModels\WarehouseIndexFrameViewModel.cs" />
     <Compile Include="Views\GameInfoFrame.xaml.cs">
       <DependentUpon>GameInfoFrame.xaml</DependentUpon>
@@ -194,11 +205,15 @@
   <ItemGroup>
     <Content Include="Assets\Background\1.jpeg" />
     <Content Include="Assets\Background\2.jpg" />
+    <Content Include="Assets\Background\3.jpg" />
+    <Content Include="Assets\Background\4.jpg" />
+    <Content Include="Assets\Background\animeSky.png" />
     <Content Include="Assets\background_1.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Luncher.exe" />
     <Content Include="Assets\Sql\Favorites.sql" />
+    <Content Include="Assets\Sql\GamePlays.sql" />
     <Content Include="Assets\Sql\Games_Tags.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -225,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Assets\Theme\DefaultTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Common\MyUserControl1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -264,8 +283,23 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.10</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp">
+      <Version>7.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
+      <Version>7.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls.Media">
+      <Version>7.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Media">
+      <Version>7.1.2</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.7.1</Version>
+    </PackageReference>
+    <PackageReference Include="Prism.Core">
+      <Version>8.1.97</Version>
     </PackageReference>
     <PackageReference Include="SQLitePCLRaw.bundle_winsqlite3">
       <Version>2.1.0</Version>
@@ -278,6 +312,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Doc.md" />
     <None Include="MyWareHouse_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

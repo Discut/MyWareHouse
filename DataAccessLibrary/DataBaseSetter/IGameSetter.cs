@@ -26,5 +26,11 @@ namespace DataAccessLibrary.DataBaseSetter
         /// <param name="gameInfo">游戏信息键值对</param>
         /// <returns>已插入的带id信息</returns>
         IDictionary<string, object> InsertGame(IDictionary<string, object> gameInfo);
+        /// <summary>
+        /// 插入游玩时间
+        /// </summary>
+        /// <param name="id">游戏id</param>
+        /// <param name="dateTime">游玩时间</param>
+        void InsertGamePlay(string id, DateTime dateTime);
     }
 }

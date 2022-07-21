@@ -10,7 +10,14 @@ namespace DataAccessLibrary.DataBaseSetter
     {
         public bool DeleteGame(int id)
         {
-            throw new NotImplementedException();
+            if (id < 0)
+                return false;
+
+            IDataAccess dataAccess = DataAccess.GetInstance();
+
+            dataAccess.DeleteData(id, "Games");
+
+            return true;
         }
 
         public IDictionary<string, object> InsertGame(IDictionary<string, object> gameInfo)
@@ -21,19 +28,17 @@ namespace DataAccessLibrary.DataBaseSetter
             IDataAccess dataAccess = DataAccess.GetInstance();
 
 
-            string command = "INSERT INTO Games(name,info,path,barImgPath,coverImgPath,evaluation,favoriteId) VALUES ('" +
-                (gameInfo.ContainsKey("name") ? gameInfo["name"].ToString() : null) + "','"+
+            string command = "INSERT INTO Games(name,info,path,evaluation,favoriteId) VALUES ('" +
+                (gameInfo.ContainsKey("name") ? gameInfo["name"].ToString() : null) + "','" +
                 (gameInfo.ContainsKey("info") ? gameInfo["info"].ToString() : null) + "','" +
                 (gameInfo.ContainsKey("path") ? gameInfo["path"].ToString() : null) + "','" +
-                (gameInfo.ContainsKey("barImgPath") ? gameInfo["barImgPath"].ToString() : null) + "','" +
-                (gameInfo.ContainsKey("coverImgPath") ? gameInfo["coverImgPath"].ToString() : null) + "','" +
                 (gameInfo.ContainsKey("evaluation") ? gameInfo["evaluation"].ToString() : null) + "','" +
                 (gameInfo.ContainsKey("favoriteId") ? gameInfo["favoriteId"].ToString() : null) + "')";
             dataAccess.InsertData(command);
-            string command2 = "SELECT id,name,info,path,barImgPath,coverImgPath,evaluation,favoriteId FROM Games ORDER BY id DESC LIMIT 1";
+            string command2 = "SELECT id,name,info,path,evaluation,favoriteId FROM Games ORDER BY id DESC LIMIT 1";
             // 从数据库中获取最新行
             IList<IList<object>> lists = dataAccess.QueryData(command2);
-            string[] keys = { "id", "name", "info", "path", "barImgPath", "coverImgPath", "evaluation", "favoriteId" };
+            string[] keys = { "id", "name", "info", "path", "evaluation", "favoriteId" };
             IDictionary<string, object> info = Utili.DataTransiform.List2Dictionary(keys, lists[0]);
 
             //foreach (IList<object> list in lists)
@@ -50,9 +55,28 @@ namespace DataAccessLibrary.DataBaseSetter
             return info;
         }
 
+        public void InsertGamePlay(string id, DateTime dateTime)
+        {
+            IDataAccess dataAccess = DataAccess.GetInstance();
+
+            string command = "INSERT INTO GamePlays(gameId,playTime) VALUES ('" + id + "','" + dateTime + "')";  
+            dataAccess.InsertData(command);
+
+        }
+
         public bool UpdateGame(IDictionary<string, object> data)
         {
-            throw new NotImplementedException();
+            IDataAccess dataAccess = DataAccess.GetInstance();
+
+            string command = "UPDATE Games SET" + " name='" + data["name"].ToString() + "'" +
+                (data.ContainsKey("info") ? ",info='" + data["info"].ToString() : null) + "'" +
+                (data.ContainsKey("favoriteId") ? ",favoriteId='" + (data["favoriteId"] == null ? "" : data["favoriteId"]) : null) + "'" +
+                (data.ContainsKey("evaluation") ? ",evaluation='" + data["evaluation"].ToString() : null) + "'" +
+                (data.ContainsKey("path") ? ",path='" + data["path"].ToString() : null) + "'" +
+                " WHERE id=" + data["id"];
+
+            dataAccess.UpdateData(command);
+            return true;
         }
     }
 }

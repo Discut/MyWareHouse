@@ -19,6 +19,11 @@ using Windows.ApplicationModel;
 using Windows.Storage;
 using MyWareHouse.Models.Data;
 using MyWareHouse.Models.FileService;
+using MyWareHouse.Models.GameService;
+using MyWareHouse.ViewModels;
+using Windows.UI;
+using Windows.System;
+using System.Collections.ObjectModel;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -35,10 +40,25 @@ namespace MyWareHouse.Views
 
         private Game game;
 
+        private GameInfoFrameViewModel _viewModel;
+
+        public GameInfoFrameViewModel ViewModel { get=>_viewModel; set=>_viewModel=value; }
+
         public GameInfoFrame()
         {
             this.InitializeComponent();
+            // 开放数据源
+            this.ViewModel = new GameInfoFrameViewModel();
+
+            ViewModel.requestUpdate = () =>
+            {
+                Update();
+            };
+
+            this.DataContext = this;
         }
+
+        public ObservableCollection<Tag> Tags { get; set; } = new ObservableCollection<Tag>();
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -55,6 +75,10 @@ namespace MyWareHouse.Views
             }
         }
 
+        /// <summary>
+        /// 页面转跳过来时调用
+        /// </summary>
+        /// <param name="e">转跳事件</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -64,6 +88,9 @@ namespace MyWareHouse.Views
                 this.Title = gameBar.Title;
                 this.appPath = gameBar.Game.ApplicationPath;
                 game = gameBar.Game;
+
+                ViewModel.Game = gameBar.Game;
+                ViewModel.TitleChar = gameBar.ShowTitle;
             }
 
             var anim = ConnectedAnimationService.GetForCurrentView().GetAnimation("ForwardConnectedAnimation");
@@ -82,7 +109,10 @@ namespace MyWareHouse.Views
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
 
-            Windows.System.Launcher.LaunchUriAsync(new Uri("MyWarehouse://" + appPath));
+            IGameStartService service = GameStartByLauncher.Instance;
+            service.StartGame(game);
+
+            //Windows.System.Launcher.LaunchUriAsync(new Uri("MyWarehouse://" + appPath));
 
             //try
             //{
@@ -195,26 +225,7 @@ namespace MyWareHouse.Views
 
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            //1.创建和自定义 FileOpenPicker
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
-
-            picker.FileTypeFilter.Add(".exe");
-
-
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
-            {
-                // Application now has read/write access to the picked file
-                string name = file.Name;
-                string appPath = file.Path.Replace("\\","/");
-
-            }
-            else
-            {
-                //this.textBlock.Text = "Operation cancelled.";
-            }
+            GameStartByLauncher.Instance.OpenGameFolder(game);
         }
 
         private void Grid_RightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -296,12 +307,34 @@ namespace MyWareHouse.Views
         {
             // 获取头图
             Windows.UI.Xaml.Media.Imaging.BitmapImage headImage = ImageFileService.Instance().TryGetImage(game.Id);
+            if (headImage == null)
+                ViewModel.HeadImageStatu = Visibility.Collapsed;
+            else
+                ViewModel.HeadImageStatu = Visibility.Visible;
             HeadImage.Source = headImage;
             // 获取背景图
             Windows.UI.Xaml.Media.Imaging.BitmapImage bgiImage = ImageFileService.Instance().TryGetImage(game.Id + "_bgi");
-            ImageBrush brush = new ImageBrush();
-            brush.ImageSource = bgiImage;
-            BackgroundBrush.ImageSource = bgiImage;
+            if (bgiImage == null)
+            {
+                // 无图片的亚力克板
+                //Microsoft.UI.Xaml.Media.AcrylicBrush brush = new Microsoft.UI.Xaml.Media.AcrylicBrush();
+                //brush.TintLuminosityOpacity = 0.2;
+                //brush.TintOpacity = 0.1;
+                //BackgroundLayout.Background = brush;
+                ViewModel.BGIStatu = Visibility.Collapsed;
+
+                ViewModel.GameInfoBoxBackgroundOpacity = 0;
+            }
+            else
+            {
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = bgiImage;
+                brush.Stretch = Stretch.UniformToFill;
+                BackgroundLayout.Background = brush;
+                ViewModel.GameInfoBoxBackgroundOpacity = 1;
+                ViewModel.BGIStatu = Visibility.Visible;
+            }
+             
 
         }
 
@@ -310,39 +343,113 @@ namespace MyWareHouse.Views
             Update();
         }
 
-        public Visibility IsShowSetHeadImage
+        private void TokenBox_TokenItemAdding(Microsoft.Toolkit.Uwp.UI.Controls.TokenizingTextBox sender, Microsoft.Toolkit.Uwp.UI.Controls.TokenItemAddingEventArgs args)
         {
-            get
+            // Take the user's text and convert it to our data type (if we have a matching one).
+            //args.Item = _samples.FirstOrDefault((item) => item.Text.Contains(e.TokenText, System.StringComparison.CurrentCultureIgnoreCase));
+            args.Item = Tags.FirstOrDefault((item) => item.Title.Contains(args.TokenText, System.StringComparison.CurrentCultureIgnoreCase));
+
+            foreach (Tag tag in Tags)
             {
-                if (HeadImage.Source == null)
-                    return Visibility.Visible;
-                else
-                    return Visibility.Collapsed;
+                if (tag.Title == args.TokenText)
+                {
+                    args.Cancel = true;
+                    break ;
+                }
+            }
+
+            // Otherwise, create a new version of our data type
+            if (args.Item == null)
+            {
+                 args.Item = new Tag()
+                 {
+                      Title = args.TokenText
+                 };
             }
         }
-        public Visibility IsShowClearHeadImage
+
+        private void TokenBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            get
-            {
-                return IsShowSetHeadImage == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-            }
+            TagsBox.Visibility = Visibility.Visible;
+
+            IList<Tag> newTags = new List<Tag>();
+            foreach (Tag tag in Tags)
+                newTags.Add(tag);
+            ViewModel.Tags = newTags;
+            UPdateTags();
         }
-        public Visibility IsShowSetBackgroundImage
+
+        /// <summary>
+        /// 更新tag
+        /// </summary>
+        public void UPdateTags()
         {
-            get
+            TagsBox.Children.Clear();
+            foreach(Tag tag in ViewModel.Tags)
             {
-                if (BackgroundBrush.ImageSource == null)
-                    return Visibility.Visible;
-                else
-                    return Visibility.Collapsed;
+                Button button = new Button();
+                button.Content = tag.Title;
+                button.CornerRadius = new CornerRadius(2);
+                button.Margin = new Thickness(0, 0, 2, 0);
+                TagsBox.Children.Add(button);
             }
+            Button addTag = new Button();
+            addTag.Content = new SymbolIcon(Symbol.Add);
+            addTag.CornerRadius = new CornerRadius(2);
+            addTag.Margin = new Thickness(0, 0, 2, 0);
+            addTag.Click += AddTag_Click;
+            TagsBox.Children.Add(addTag);
         }
-        public Visibility IsShowClearBackgroundImage
+
+        /// <summary>
+        /// 添加tag按钮触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AddTag_Click(object sender, RoutedEventArgs e)
         {
-            get
+            // 隐藏tag展示box
+            TagsBox.Visibility = Visibility.Collapsed;
+            Tags.Clear();
+            foreach (Tag tag in ViewModel.Tags)
             {
-                return IsShowSetBackgroundImage == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                Tags.Add(tag);
             }
+            // 让输入框获取焦点
+            TokenBox.Focus(FocusState.Programmatic);
+
+            
+
         }
+
+        private void TagsBox_Loading_1(FrameworkElement sender, object args)
+        {
+            UPdateTags();
+        }
+        /// <summary>
+        /// 编辑评价按钮触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 隐藏自己
+            EvaluationBox.Visibility = Visibility.Collapsed;
+            // 让文本框获取焦点
+            EvaluationInputBox.Focus(FocusState.Programmatic);
+
+
+        }
+        /// <summary>
+        /// 保存评价按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            // 显示 显示评价盒子
+            EvaluationBox.Visibility = Visibility.Visible;
+        }
+
     }
 }
