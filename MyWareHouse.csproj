@@ -312,6 +312,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Doc.md" />
     <None Include="MyWareHouse_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

@@ -30,9 +30,9 @@
             </CommandBarFlyout>
             <DataTemplate x:Key="IndexLeftMenuItem" x:DataType="models:GameBar">
                 <muxc:NavigationViewItem
+                    Loading="NavigationViewItem_Loading"
                     Content="{x:Bind Title}"
-                    Icon="{x:Bind Icon}"
-                    MenuItemsSource="{x:Bind Children}"
+                    MenuItemsSource="{x:Bind Children, Mode=OneWay}"
                     RightTapped="NavigationViewItem_RightTapped"
                     Tag="{x:Bind Myself}"
                     ToolTipService.ToolTip="{x:Bind Title}" />

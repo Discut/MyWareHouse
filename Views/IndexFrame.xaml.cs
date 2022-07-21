@@ -202,5 +202,20 @@ namespace MyWareHouse.Views
             indexFrameViewModel.MoveOutFavorite(target);
         }
 
+        /// <summary>
+        /// 当菜单Item加载时调用
+        /// 
+        /// 由于使用x:bind绑定Item的Icon会导致错误，只能在菜单加载时绑定Icon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void NavigationViewItem_Loading(FrameworkElement sender, object args)
+        {
+            if (sender is Microsoft.UI.Xaml.Controls.NavigationViewItem item)
+            {
+                GameBar tag = item.Tag as GameBar;
+                item.Icon = tag.Icon;
+            }
+        }
     }
 }
