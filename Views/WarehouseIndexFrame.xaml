@@ -143,21 +143,71 @@
                     Margin="12,0,0,0"
                     Orientation="Horizontal">
                     <StackPanel
+                        Visibility="{x:Bind viewModel.IsShowLastPlayBar(viewModel.LastPlyGames), Mode=OneWay}"
                         Width=" 450"
                         Height="299"
                         Margin="0,-8,16,0"
-                        Background="{x:Bind ViewModel.ThemeFactory.Theme.GameBarColor}" />
+                        Background="{x:Bind ViewModel.ThemeFactory.Theme.GameBarColor}"
+                        Tapped="StackPanel_Tapped">
+                        <Grid Width=" 450" Height="299">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="120" />
+                                <RowDefinition Height="70" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel
+                                Grid.Row="0"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Bottom">
+                                <TextBlock
+                                    FontSize="64"
+                                    FontWeight="SemiBold"
+                                    Foreground="{x:Bind viewModel.ThemeFactory.Theme.FontColor}"
+                                    Text="{x:Bind viewModel.LastPlayGame.Title, Mode=OneWay}" />
+                                <Rectangle Height="2" Fill="{x:Bind viewModel.ThemeFactory.Theme.FontColor}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        FontSize="24"
+                                        Foreground="{x:Bind viewModel.ThemeFactory.Theme.FontColor}"
+                                        Text="最近游戏时间：" />
+                                    <TextBlock
+                                        FontSize="24"
+                                        Foreground="{x:Bind viewModel.ThemeFactory.Theme.FontColor}"
+                                        Text="{x:Bind viewModel.LastPlayGame.play}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <Grid Grid.Row="2" Tapped="Grid_Tapped">
+                                <Grid.Background>
+                                    <SolidColorBrush Opacity="0.3" Color="#fff" />
+                                </Grid.Background>
+                                <Grid
+                                    Width="80"
+                                    Height="80"
+                                    Margin="0,0,14,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Background="{x:Bind ViewModel.ThemeFactory.Theme.ThemeColor, Mode=OneWay}"
+                                    CornerRadius="8">
+                                    <SymbolIcon
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Foreground="{x:Bind viewModel.ThemeFactory.Theme.Color2Brush(viewModel.ThemeFactory.Theme.ThemeFontColor, 1)}"
+                                        RenderTransformOrigin="0.5,0.5"
+                                        Symbol="Play">
+                                        <SymbolIcon.RenderTransform>
+                                            <CompositeTransform ScaleX="2" ScaleY="1.9" />
+                                        </SymbolIcon.RenderTransform>
+                                    </SymbolIcon>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </StackPanel>
                     <GridView
                         x:Name="gridViewTransform"
                         IsItemClickEnabled="True"
                         ItemClick="GameBarItem_Click"
                         ItemTemplate="{StaticResource ImageTemplate}"
                         ItemsSource="{x:Bind ViewModel.LastPlyGames}">
-                        <GridView.ItemContainerTransitions>
-                            <TransitionCollection>
-                                <EntranceThemeTransition FromHorizontalOffset="1" IsStaggeringEnabled="False" />
-                            </TransitionCollection>
-                        </GridView.ItemContainerTransitions>
                         <GridView.ItemContainerStyle>
                             <Style TargetType="GridViewItem">
                                 <Setter Property="Margin" Value="5,5,19,5" />

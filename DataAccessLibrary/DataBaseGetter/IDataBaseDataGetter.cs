@@ -36,5 +36,17 @@ namespace DataAccessLibrary.DataBaseGetter
         /// </summary>
         /// <returns>游玩记录</returns>
         IList<IDictionary<string, object>> GetAllPlays();
+        /// <summary>
+        /// 获取此游戏的最近游戏时间
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <returns></returns>
+        string GetPlayWith(string gameId);
+        /// <summary>
+        /// 获取游戏下的所有tag
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        IList<IDictionary<string, object>> GetGameTags(string id);
     }
 }

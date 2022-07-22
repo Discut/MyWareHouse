@@ -24,5 +24,11 @@ namespace MyWareHouse.Models.GameService
         /// </summary>
         /// <returns></returns>
         IList<IDictionary<string, object>> GetAllPlays();
+        /// <summary>
+        /// 获取某一游戏的最近游玩时间
+        /// </summary>
+        /// <param name="game"></param>
+        /// <returns></returns>
+        string GetGamePlay(Data.Game game);
     }
 }

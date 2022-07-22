@@ -32,5 +32,11 @@ namespace DataAccessLibrary.DataBaseSetter
         /// <param name="id">游戏id</param>
         /// <param name="dateTime">游玩时间</param>
         void InsertGamePlay(string id, DateTime dateTime);
+
+        /// <summary>
+        /// 插入游戏的tags
+        /// </summary>
+        /// <param name="tags"></param>
+        void InsertGameTags(string gameId, IList<IDictionary<string, object>> tags);
     }
 }

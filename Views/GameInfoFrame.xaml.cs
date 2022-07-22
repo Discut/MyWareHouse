@@ -24,6 +24,7 @@ using MyWareHouse.ViewModels;
 using Windows.UI;
 using Windows.System;
 using System.Collections.ObjectModel;
+using DataAccessLibrary;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -60,10 +61,6 @@ namespace MyWareHouse.Views
 
         public ObservableCollection<Tag> Tags { get; set; } = new ObservableCollection<Tag>();
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         public void PrepareConnectedAnimation(ConnectedAnimationConfiguration config)
         {
@@ -91,7 +88,12 @@ namespace MyWareHouse.Views
 
                 ViewModel.Game = gameBar.Game;
                 ViewModel.TitleChar = gameBar.ShowTitle;
+
+                // 获取Tags
+                ViewModel.Tags = game.Tags;
+                
             }
+
 
             var anim = ConnectedAnimationService.GetForCurrentView().GetAnimation("ForwardConnectedAnimation");
             if (anim != null)
@@ -271,6 +273,7 @@ namespace MyWareHouse.Views
         private async void ClearHeadImageAsync(object sender, RoutedEventArgs e)
         {
             await ImageFileService.Instance().ClearImage(this.game.Id);
+            Windows.UI.Xaml.Media.Imaging.BitmapImage bgiImage = null;
             Update();
         }
         private async void SetBackgroudImageAsync(object sender, RoutedEventArgs e)
@@ -322,7 +325,7 @@ namespace MyWareHouse.Views
                 //brush.TintOpacity = 0.1;
                 //BackgroundLayout.Background = brush;
                 ViewModel.BGIStatu = Visibility.Collapsed;
-
+                BackgroundLayout.Background = null;
                 ViewModel.GameInfoBoxBackgroundOpacity = 0;
             }
             else
@@ -377,6 +380,11 @@ namespace MyWareHouse.Views
                 newTags.Add(tag);
             ViewModel.Tags = newTags;
             UPdateTags();
+
+            Game game = ViewModel.Game;
+            game.Tags = ViewModel.Tags;
+            GameServiceFactory.GetGameModifyService().UpdataGame(game);
+
         }
 
         /// <summary>
@@ -449,6 +457,10 @@ namespace MyWareHouse.Views
         {
             // 显示 显示评价盒子
             EvaluationBox.Visibility = Visibility.Visible;
+
+            Game game = ViewModel.Game;
+            GameServiceFactory.GetGameModifyService().UpdataGame(game);
+
         }
 
     }

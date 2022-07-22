@@ -48,7 +48,7 @@ namespace DataAccessLibrary
 
         public ITagSetter GetTagSetter()
         {
-            throw new NotImplementedException();
+            return new TagSetter();
         }
 
         public async Task<bool> Init()

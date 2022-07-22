@@ -134,6 +134,7 @@
     <Compile Include="DataBaseSetter\IGameSetter.cs" />
     <Compile Include="DataBaseSetter\ILinkSetter.cs" />
     <Compile Include="DataBaseSetter\ITagSetter.cs" />
+    <Compile Include="DataBaseSetter\TagSetter.cs" />
     <Compile Include="Exception\NotFoundDataBasePathException.cs" />
     <Compile Include="Exception\NotFoundSQLFileException.cs" />
     <Compile Include="IDataAccess.cs" />

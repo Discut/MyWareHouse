@@ -11,7 +11,11 @@ namespace MyWareHouse.Models.Data.Theme
 {
     public class ThemeBase : BindableBase
     {
+        /// <summary>
+        /// 突出对比的颜色 一般为白色
+        /// </summary>
         private Brush _fontColor;
+        private Color _themFontColor;
         private Brush _themeColor;
         private Brush _themeColorLight;
         private Brush _themeColorDeep;
@@ -21,6 +25,15 @@ namespace MyWareHouse.Models.Data.Theme
 
         public ThemeBase()
         {
+        }
+
+        /// <summary>
+        /// 与主题相类似的颜色
+        /// </summary>
+        public Color ThemeFontColor
+        {
+            get => _themFontColor;
+            set => SetProperty(ref _themFontColor, value);
         }
         /// <summary> 
         /// 游戏标识栏颜色 颜色默认为 255, 174, 82 的橙色
@@ -100,6 +113,18 @@ namespace MyWareHouse.Models.Data.Theme
             {
                 this.SetProperty(ref _background, value);
             }
+        }
+        /// <summary>
+        /// 把颜色转换为Brush
+        /// </summary>
+        /// <param name="color">待转换颜色</param>
+        /// <param name="opacity">透明度 1--不透明</param>
+        /// <returns></returns>
+        public Brush Color2Brush(Color color, double opacity = 1)
+        {
+            SolidColorBrush brush = new SolidColorBrush(color);
+            brush.Opacity = opacity;
+            return brush;
         }
     }
 }

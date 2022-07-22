@@ -27,7 +27,7 @@ namespace DataAccessLibrary.DataBaseSetter
 
             IDataAccess dataAccess = DataAccess.GetInstance();
 
-
+            // 插入基础数据
             string command = "INSERT INTO Games(name,info,path,evaluation,favoriteId) VALUES ('" +
                 (gameInfo.ContainsKey("name") ? gameInfo["name"].ToString() : null) + "','" +
                 (gameInfo.ContainsKey("info") ? gameInfo["info"].ToString() : null) + "','" +
@@ -35,6 +35,8 @@ namespace DataAccessLibrary.DataBaseSetter
                 (gameInfo.ContainsKey("evaluation") ? gameInfo["evaluation"].ToString() : null) + "','" +
                 (gameInfo.ContainsKey("favoriteId") ? gameInfo["favoriteId"].ToString() : null) + "')";
             dataAccess.InsertData(command);
+
+
             string command2 = "SELECT id,name,info,path,evaluation,favoriteId FROM Games ORDER BY id DESC LIMIT 1";
             // 从数据库中获取最新行
             IList<IList<object>> lists = dataAccess.QueryData(command2);
@@ -62,6 +64,24 @@ namespace DataAccessLibrary.DataBaseSetter
             string command = "INSERT INTO GamePlays(gameId,playTime) VALUES ('" + id + "','" + dateTime + "')";  
             dataAccess.InsertData(command);
 
+        }
+
+        public void InsertGameTags(string gameId, IList<IDictionary<string, object>> tags)
+        {
+            string deleteCommand = "DELETE FROM Games_Tags WHERE gameId=" + gameId;
+            DataAccess.GetInstance().QueryData(deleteCommand);
+            foreach (var item in tags)
+            {
+                IDictionary<string, object> tag = item; ;
+                if (item["id"] == null)
+                {
+                    ITagSetter tagSetter = DataBaseFactory.GetInstance().GetTagSetter();
+                    tag = tagSetter.InsertTag(item);
+                }
+
+                string insertCommand = "INSERT INTO Games_Tags VALUES('" + gameId + "','" + tag["id"] + "')";
+                DataAccess.GetInstance().InsertData(insertCommand);
+            }
         }
 
         public bool UpdateGame(IDictionary<string, object> data)

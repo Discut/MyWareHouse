@@ -15,8 +15,9 @@ namespace MyWareHouse.Models.Data.Theme
         public ShamrockTheme()
         {
             FontColor = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
-            ThemeColor = new SolidColorBrush(Color.FromArgb(255, 76, 128, 69));
-            ColorTheme = Color.FromArgb(255, 76, 128, 69);
+            ThemeColor = new SolidColorBrush(Color.FromArgb(255, 89, 143, 81));
+            ColorTheme = Color.FromArgb(255, 89, 143, 81);
+            ThemeFontColor = Color.FromArgb(255, 50, 87, 45);
 
             GameBarColor = new SolidColorBrush(Color.FromArgb(255, 68, 117, 61));
 
