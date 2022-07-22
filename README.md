@@ -1,7 +1,5 @@
 # MyWareHouse
-This application is used to manage game on PC.
-
-We can call it Game Manager, Game Favorites, Game Warehouse.
+This application is used to manage game on PC.We can call it Game Manager, Game Favorites, Game Warehouse.
 
 
 ## screenshots
