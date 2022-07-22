@@ -1,4 +1,5 @@
 ﻿using MyWareHouse.Models.Data;
+using MyWareHouse.Models.GameService;
 using MyWareHouse.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,8 @@ namespace MyWareHouse.Views
     /// </summary>
     public sealed partial class WarehouseIndexFrame : Page
     {
-        
+
+        private bool isGameStart = false;
 
         private WarehouseIndexFrameViewModel viewModel;
 
@@ -60,7 +62,6 @@ namespace MyWareHouse.Views
          */
         private void GameBarItem_Click(object sender, ItemClickEventArgs e)
         {
-            //gridViewTransform.PrepareConnectedAnimation("ForwardConnectedAnimation", item, "TransformeControl");
 
             // Get the collection item corresponding to the clicked item.
             if (gridViewTransform.ContainerFromItem(e.ClickedItem) is GridViewItem container)
@@ -107,7 +108,11 @@ namespace MyWareHouse.Views
             // Note that we suppress the default animation. 
             Frame.Navigate(typeof(Views.GameInfoFrame), control, new DrillInNavigationTransitionInfo());
         }
-
+        /// <summary>
+        /// 页面加载时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private async void Page_Loading(FrameworkElement sender, object args)
         {
 
@@ -148,6 +153,34 @@ namespace MyWareHouse.Views
                 viewModel.WeekTitle = now.DayOfWeek.ToString();
 
             }
+        }
+
+        /// <summary>
+        /// 最近游戏盒子 开始游戏点击
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Grid_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            isGameStart = true;
+            GameServiceFactory.GetGameStartService().StartGame(viewModel.LastPlayGame.Game);
+            Frame.Navigate(typeof(Views.WarehouseIndexFrame), null, new DrillInNavigationTransitionInfo());
+        }
+        /// <summary>
+        /// 最近游戏盒子点击
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StackPanel_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (viewModel.LastPlayGame != null && !isGameStart)
+            {
+
+                Frame.Navigate(typeof(Views.GameInfoFrame), viewModel.LastPlayGame, new DrillInNavigationTransitionInfo());
+
+            }
+            if (isGameStart)
+                isGameStart = false;
         }
     }
 }

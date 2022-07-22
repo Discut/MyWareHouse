@@ -96,6 +96,14 @@ namespace MyWareHouse.Models.GameService
         public bool UpdataGame(Game game)
         {
             DataAccessLibrary.DataBaseFactory.GetInstance().GetGameSetter().UpdateGame(game.toDinctionary());
+
+            IList<IDictionary<string, object>> tags = new List<IDictionary<string, object>>(); 
+            foreach(Tag tag in game.Tags)
+            {
+                IDictionary<string, object> dictionaries = tag.toDinctionary();
+                tags.Add(dictionaries);
+            }
+            DataAccessLibrary.DataBaseFactory.GetInstance().GetGameSetter().InsertGameTags(game.Id, tags);
             return true;
         }
 
@@ -134,6 +142,17 @@ namespace MyWareHouse.Models.GameService
             foreach(IDictionary<string, object> dic in lists)
             {
                 Game game = GameFactory.GetGame(dic);
+
+                IList<IDictionary<string, object>> taginfos = getter.GetGameTags(game.Id);
+                IList<Tag> tags = new List<Tag>();
+                foreach(var taginfo in taginfos)
+                {
+                    Tag tag = new Tag();
+                    tag.id = taginfo["id"].ToString();
+                    tag.Title = taginfo["title"].ToString();
+                    tags.Add(tag);
+                }
+                game.Tags = tags;
                 result.Add(game);
             }
 
@@ -151,6 +170,15 @@ namespace MyWareHouse.Models.GameService
         {
             // 引入设置服务
             DataAccessLibrary.DataBaseFactory.GetInstance().GetGameSetter().InsertGamePlay(gameId, time);
+        }
+
+        public string GetGamePlay(Game game)
+        {
+            string date = DataAccessLibrary.DataBaseFactory.GetInstance().GetGetter().GetPlayWith(game.Id);
+            if (date != null)
+                return date;
+            else
+                return null;
         }
     }
 }

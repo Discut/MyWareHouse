@@ -49,7 +49,7 @@
             Loaded="leftBar_Loaded"
             MenuItemTemplate="{StaticResource IndexLeftMenuItem}"
             MenuItemsSource="{x:Bind indexFrameViewModel.Categories, Mode=OneWay}"
-            OpenPaneLength="200"
+            OpenPaneLength="300"
             PaneDisplayMode="Auto"
             SelectionChanged="{x:Bind indexFrameViewModel.leftBar_SelectionChanged}">
             <Frame

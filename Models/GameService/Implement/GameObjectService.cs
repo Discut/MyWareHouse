@@ -39,6 +39,20 @@ namespace MyWareHouse.Models.GameService.Implement
                     (string)gameInfo["evaluation"]);
 
 
+                // 获取game下的tag
+                IList<IDictionary<string, object>> taginfos = DataAccessLibrary.DataBaseFactory.GetInstance().GetGetter().GetGameTags(game.Id);
+                IList<Tag> tags = new List<Tag>();
+                foreach (var taginfo in taginfos)
+                {
+                    Tag tag = new Tag();
+                    tag.id = taginfo["id"].ToString();
+                    tag.Title = taginfo["title"].ToString();
+                    tags.Add(tag);
+                }
+                game.Tags = tags;
+
+
+
                 IList<Game> observableCollections;
                 if (!games.ContainsKey(gameInfo["favorite"].ToString()))
                 {
@@ -90,6 +104,18 @@ namespace MyWareHouse.Models.GameService.Implement
             {
                 //gameInfo.
                 Game game = GameFactory.GetGame(gameInfo);
+
+                // 获取game下的tag
+                IList<IDictionary<string, object>> taginfos = DataAccessLibrary.DataBaseFactory.GetInstance().GetGetter().GetGameTags(game.Id);
+                IList<Tag> tags = new List<Tag>();
+                foreach (var taginfo in taginfos)
+                {
+                    Tag tag = new Tag();
+                    tag.id = taginfo["id"].ToString();
+                    tag.Title = taginfo["title"].ToString();
+                    tags.Add(tag);
+                }
+                game.Tags = tags;
 
 
                 games.Add(game);

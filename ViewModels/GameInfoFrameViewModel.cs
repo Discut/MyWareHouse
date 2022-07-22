@@ -143,5 +143,11 @@ namespace MyWareHouse.ViewModels
 
         }
 
+        public string GetEvaluation(string str)
+        {
+            return "「" + str + "」";
+        }
+
+        
     }
 }

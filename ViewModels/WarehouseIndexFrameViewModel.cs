@@ -61,43 +61,45 @@ namespace MyWareHouse.ViewModels
             set { SetProperty(ref _theme, value); }
         }
 
+        public GameBar LastPlayGame { get; set; }
+
         public WarehouseIndexFrameViewModel()
         {
             this.AllGames = new List<GameBar>();
             this.LastPlyGames = new List<GameBar>();
             ThemeFactory = ThemeFactory.Instance;
 
-
+            // 获取用于生成侧边栏的游戏数据资源
             IList<GameBar> games = GameServiceFactory.GetGameGetterService().GetGameBarList();
-
+            // 在这里 通过for循环间接获取了所有游戏
             foreach(GameBar gameBar in games)
             {
                 GameBar[] gameBars = gameBar.Children.ToArray();
                 AllGames.AddRange(gameBars);
             }
 
-            IList<IDictionary<string, object>> lists = GameServiceFactory.GetGameGetterService().GetAllPlays();
 
-            foreach (Dictionary<string, object> dic in lists)
+            // 获取游戏最近运行的日期
+            foreach(GameBar gameBar in AllGames)
             {
-                foreach (GameBar gameBar in AllGames)
+                string date = GameServiceFactory.GetGameGetterService().GetGamePlay(gameBar.Game);
+                if (date != null)
                 {
-                    if (dic["gameId"] as string == gameBar.Game.Id)
-                    {   if (gameBar.play.DayOfYear == 1)
-                        {
-                            gameBar.play = Convert.ToDateTime(dic["playTime"].ToString());
-                            LastPlyGames.Add(gameBar);
-                        }
-                    }
+                    gameBar.play = Convert.ToDateTime(date);
+                    LastPlyGames.Add(gameBar);
                 }
-                
+                else
+                    continue;
             }
             LastPlyGames.Sort((GameBar g1, GameBar g2) =>
             {
                 return DateTime.Compare(g2.play, g1.play);
             });
 
-
+            // 将最近的一个游戏单独分离出来
+            LastPlayGame = LastPlyGames[0];
+            LastPlyGames.RemoveAt(0);
+            
 
         }
     }

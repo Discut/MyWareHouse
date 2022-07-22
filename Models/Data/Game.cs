@@ -17,7 +17,7 @@ namespace MyWareHouse.Models.Data
         private string _favoriteId;
         private string _info;
         private string _evaluation;
-        private string[] tags;
+        private IList<Tag> tags;
 
         public string FavoriteId
         {
@@ -31,7 +31,7 @@ namespace MyWareHouse.Models.Data
             set { _evaluation = value; }
         }
 
-        public string[] Tags
+        public IList<Tag> Tags
         {
             get { return tags; }
             set { tags = value; }
