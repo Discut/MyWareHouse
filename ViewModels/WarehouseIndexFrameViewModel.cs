@@ -9,6 +9,7 @@ using MyWareHouse.Models.GameService;
 using MyWareHouse.Models.GameService.Implement;
 using Prism.Mvvm;
 using MyWareHouse.Models.ThemeService;
+using Windows.UI.Xaml;
 
 namespace MyWareHouse.ViewModels
 {
@@ -96,11 +97,27 @@ namespace MyWareHouse.ViewModels
                 return DateTime.Compare(g2.play, g1.play);
             });
 
-            // 将最近的一个游戏单独分离出来
-            LastPlayGame = LastPlyGames[0];
-            LastPlyGames.RemoveAt(0);
+            if (LastPlyGames.Count != 0)
+            {
+                // 将最近的一个游戏单独分离出来
+                LastPlayGame = LastPlyGames[0];
+                LastPlyGames.RemoveAt(0);
+            }
+            
             
 
+        }
+        /// <summary>
+        /// 用户是否第一次游玩游戏，在没有游玩记录的情况下 LastPlayGameBar将不显示
+        /// </summary>
+        /// <param name="bars"></param>
+        /// <returns></returns>
+        public Visibility IsShowLastPlayBar(List<GameBar> bars)
+        {
+            if (bars.Count == 0)
+                return Visibility.Collapsed;
+            else
+                return Visibility.Visible;
         }
     }
 }

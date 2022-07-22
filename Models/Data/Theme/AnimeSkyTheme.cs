@@ -16,6 +16,7 @@ namespace MyWareHouse.Models.Data.Theme
             FontColor = new SolidColorBrush(Color.FromArgb(255, 255, 255,255));
             ColorTheme = Color.FromArgb(255, 38, 122, 140);
             ThemeColor = new SolidColorBrush(Color.FromArgb(255, 252, 156, 139));
+            ThemeFontColor = Color.FromArgb(255, 247, 201, 187);
 
             this.GameBarColor = new SolidColorBrush(Color.FromArgb(255, 247, 201, 187));
 

@@ -143,6 +143,7 @@
                     Margin="12,0,0,0"
                     Orientation="Horizontal">
                     <StackPanel
+                        Visibility="{x:Bind viewModel.IsShowLastPlayBar(viewModel.LastPlyGames), Mode=OneWay}"
                         Width=" 450"
                         Height="299"
                         Margin="0,-8,16,0"
